@@ -15,5 +15,10 @@ namespace PokerSim.Engine.Deck
                 return false;
             }
         }
+
+        private void Initialize()
+        {
+            
+        }
     }
 }
