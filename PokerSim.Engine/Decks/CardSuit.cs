@@ -1,4 +1,4 @@
-namespace PokerSim.Engine.Deck
+namespace PokerSim.Engine.Decks
 {
     public enum CardSuit
     {

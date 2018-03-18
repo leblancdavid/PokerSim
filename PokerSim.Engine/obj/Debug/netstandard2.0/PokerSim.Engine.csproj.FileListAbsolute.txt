@@ -1,3 +1,8 @@
 C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\obj\Debug\netstandard2.0\PokerSim.Engine.csproj.CoreCompileInputs.cache
 C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\obj\Debug\netstandard2.0\PokerSim.Engine.AssemblyInfoInputs.cache
 C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\obj\Debug\netstandard2.0\PokerSim.Engine.AssemblyInfo.cs
+C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\bin\Debug\netstandard2.0\PokerSim.Engine.deps.json
+C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\bin\Debug\netstandard2.0\PokerSim.Engine.dll
+C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\bin\Debug\netstandard2.0\PokerSim.Engine.pdb
+C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\obj\Debug\netstandard2.0\PokerSim.Engine.dll
+C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\obj\Debug\netstandard2.0\PokerSim.Engine.pdb

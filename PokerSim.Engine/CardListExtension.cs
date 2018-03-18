@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using PokerSim.Engine.Deck;
+using PokerSim.Engine.Decks;
 
 namespace PokerSim.Engine
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace PokerSim.Engine.Deck
+namespace PokerSim.Engine.Decks
 {
     public class Deck
     {
