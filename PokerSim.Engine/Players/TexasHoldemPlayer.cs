@@ -15,7 +15,7 @@ namespace PokerSim.Engine.Players
         }
         public PlayerTurn TakeTurn(TexasHoldemPlayerTurnState state)
         {
-            return new PlayerTurn();
+            return new PlayerTurn(0);
         }
     }
 }

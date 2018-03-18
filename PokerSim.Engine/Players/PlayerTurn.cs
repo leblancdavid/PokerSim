@@ -2,19 +2,10 @@ namespace PokerSim.Engine.Players
 {
     public class PlayerTurn
     {
-        public static PlayerTurn Call()
+        public int Bet { get; private set; }
+        public PlayerTurn(int bet)
         {
-            return new PlayerTurn();
-        }
-
-        public static PlayerTurn Fold()
-        {
-            return new PlayerTurn();
-        }
-
-        public static PlayerTurn Raise(int chips)
-        {
-            return new PlayerTurn();
+            Bet = bet;
         }
     }
 }

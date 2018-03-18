@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PokerSim.Engine.Decks;
 
 namespace PokerSim.Engine.Players
@@ -9,6 +10,7 @@ namespace PokerSim.Engine.Players
         private Deck _deck;
         private List<TexasHoldemPlayer> _players;
         private List<TexasHoldemPlayerState> _playerStates;
+        private List<Card> _communityCards;
         private int _smallBlindIndex = -1;
         private int _smallBlindValue = 1;
         private int _bigBlindIndex = 0;
@@ -63,12 +65,59 @@ namespace PokerSim.Engine.Players
 
         private void DoBettingRound()
         {
-            bool bettingDone = false;
             int currentPlayer = _startingPlayerIndex;
-            while(!bettingDone)
+            var bets = new int[_players.Count];
+            bets[_bigBlindIndex] = _bigBlindValue;
+            bets[_smallBlindIndex] = _smallBlindValue;
+            while(!CheckBettingDone(bets))
             {
+                int currentBet = bets.Max();
+                int currentPot = bets.Sum();
+                var turnResult = _players[currentPlayer].TakeTurn(
+                    new TexasHoldemPlayerTurnState(
+                        _playerStates[currentPlayer].Cards.ToList(),
+                        _communityCards,
+                        currentBet,
+                        currentPot,
+                        _playerStates[currentPlayer].ChipCount
+                    ));
+                
+                if(turnResult.Bet == 0 || 
+                    (turnResult.Bet + bets[currentPlayer] < _currentBet &&
+                     turnResult.Bet < _playerStates[currentPlayer].ChipCount))
+                {
+                    _playerStates[currentPlayer].Fold();
+                }
+                else if(turnResult.Bet + bets[currentPlayer] < _currentBet &&
+                     turnResult.Bet == _playerStates[currentPlayer].ChipCount)
+                {
+                    //the player is all in, which will result in a split pot
+                }
+                else
+                {
+                    _playerStates[currentPlayer].RemoveChips(turnResult.Bet);
+                    bets[currentPlayer] += turnResult.Bet;
+                }
 
+                currentPlayer++;
+                if(currentPlayer >= _playerStates.Count)
+                {
+                    currentPlayer = 0;
+                }
             }
+        }
+
+        private bool CheckBettingDone(int[] bets)
+        {
+            int currentMaxBet = bets.Max();
+            for(int i = 0; i < _playerStates.Count; ++i)
+            {
+                if(!_playerStates[i].HasFolded && bets[i] != currentMaxBet)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void UpdateBlinds(int smallBlind, int bigBlind)
