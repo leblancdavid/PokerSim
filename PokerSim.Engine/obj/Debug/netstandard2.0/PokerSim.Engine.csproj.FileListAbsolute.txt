@@ -1,0 +1,3 @@
+C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\obj\Debug\netstandard2.0\PokerSim.Engine.csproj.CoreCompileInputs.cache
+C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\obj\Debug\netstandard2.0\PokerSim.Engine.AssemblyInfoInputs.cache
+C:\Users\Dave\Documents\Projects\PokerSim\PokerSim.Engine\obj\Debug\netstandard2.0\PokerSim.Engine.AssemblyInfo.cs
