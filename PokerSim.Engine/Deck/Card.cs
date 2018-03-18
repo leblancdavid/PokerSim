@@ -5,7 +5,6 @@ namespace PokerSim.Engine.Deck
         public int Id { get; private set; }
         public CardSuit Suit { get; private set; }
         public int Value { get; private set; }
-
         public string Name 
         {
             get
@@ -24,6 +23,13 @@ namespace PokerSim.Engine.Deck
                         return $"{Value} of {Suit.ToString()}";
                 }
             }
+        }
+
+        public Card(int id, CardSuit suit, int value)
+        {
+            Id = id;
+            Suit = suit;
+            Value = value;
         }
     }
 }
