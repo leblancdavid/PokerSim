@@ -2,8 +2,8 @@
 
 namespace PokerSim.Engine.Decks
 {
-    public interface IHandScorer
+    public interface IHandBuilder
     {
-        IHand GetHand(IEnumerable<Card> cards);
+        IHand BuildHand(IEnumerable<Card> cards);
     }
 }

@@ -9,7 +9,7 @@ namespace PokerSim.Engine.Decks
     public class HighCardHand : BaseHand
     {
         public HighCardHand(IEnumerable<Card> cards) 
-            : base(HandType.HighCard, GetHandFromCards(cards))
+            : base(HandType.HighCard, cards)
         {
             Score = 0;
             long scoreFactor = 100000;
@@ -20,9 +20,9 @@ namespace PokerSim.Engine.Decks
             }
         }
 
-        private static IEnumerable<Card> GetHandFromCards(IEnumerable<Card> cards)
+        public static HighCardHand GetHandFromCards(IEnumerable<Card> cards)
         {
-            return cards.OrderByDescending(x => x.Value).Take(5);
+            return new HighCardHand(cards.OrderByDescending(x => x.Value).Take(5));
         }
 
         public override bool IsValid => IsHighCardHand(Cards) && Cards.Count() == 5;
