@@ -28,7 +28,7 @@ namespace PokerSim.Engine.Players
         {
             _players.Add(player);
         }
-
+        /*
         public void DealNewHand()
         {
             _deck = new Deck();
@@ -56,9 +56,10 @@ namespace PokerSim.Engine.Players
 
             }
         }
-
+         
         private void DoBettingRound()
         {
+           
             int currentPlayer = _startingPlayerIndex;
             var bets = new int[_players.Count];
             bets[_bigBlindIndex] = _bigBlindValue;
@@ -96,6 +97,7 @@ namespace PokerSim.Engine.Players
                     currentPlayer = 0;
                 }
             }
+            
         }
 
         private bool CheckBettingDone(int[] bets)
@@ -136,7 +138,7 @@ namespace PokerSim.Engine.Players
             }
             _currentPlayerIndex = _startingPlayerIndex;
         }
-
+         */
 
     }
 }
