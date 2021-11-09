@@ -9,7 +9,6 @@ namespace PokerSim.Engine.Players
     {
         private Deck _deck;
         private List<TexasHoldemPlayer> _players;
-        private List<TexasHoldemPlayerState> _playerStates;
         private List<Card> _communityCards;
         private int _smallBlindIndex = -1;
         private int _smallBlindValue = 1;
@@ -23,13 +22,11 @@ namespace PokerSim.Engine.Players
         public TexasHoldemDealer()
         {
             _players = new List<TexasHoldemPlayer>();
-            _playerStates = new List<TexasHoldemPlayerState>();
         }
 
         public void AddPlayer(TexasHoldemPlayer player, int initialChips)
         {
             _players.Add(player);
-            _playerStates.Add(new TexasHoldemPlayerState(initialChips));
         }
 
         public void DealNewHand()
@@ -37,17 +34,14 @@ namespace PokerSim.Engine.Players
             _deck = new Deck();
             _deck.Shuffle();
             MoveBlinds();
-            // foreach(var playerState in _playerStates)
-            // {
-            //     playerState.DiscardHand();
-            // }
-            _playerStates[_smallBlindIndex].RemoveChips(_smallBlindValue);
-            _playerStates[_bigBlindIndex].RemoveChips(_bigBlindValue);
+
+            _players[_smallBlindIndex].RemoveChips(_smallBlindValue);
+            _players[_bigBlindIndex].RemoveChips(_bigBlindValue);
             for(int i = 0; i < 2; ++i)
             {
-                foreach(var playerState in _playerStates)
+                foreach(var player in _players)
                 {
-                    playerState.Deal(_deck.Draw());
+                    player.Deal(_deck.Draw());
                 }
             }
 
@@ -75,32 +69,29 @@ namespace PokerSim.Engine.Players
                 int currentPot = bets.Sum();
                 var turnResult = _players[currentPlayer].TakeTurn(
                     new TexasHoldemPlayerTurnState(
-                        _playerStates[currentPlayer].Cards.ToList(),
                         _communityCards,
                         currentBet,
-                        currentPot,
-                        _playerStates[currentPlayer].ChipCount
-                    ));
+                        currentPot));
                 
                 if(turnResult.Bet == 0 || 
                     (turnResult.Bet + bets[currentPlayer] < _currentBet &&
-                     turnResult.Bet < _playerStates[currentPlayer].ChipCount))
+                     turnResult.Bet < _players[currentPlayer].ChipCount))
                 {
-                    _playerStates[currentPlayer].Fold();
+                    _players[currentPlayer].Fold();
                 }
                 else if(turnResult.Bet + bets[currentPlayer] < _currentBet &&
-                     turnResult.Bet == _playerStates[currentPlayer].ChipCount)
+                     turnResult.Bet == _players[currentPlayer].ChipCount)
                 {
                     //the player is all in, which will result in a split pot
                 }
                 else
                 {
-                    _playerStates[currentPlayer].RemoveChips(turnResult.Bet);
+                    _players[currentPlayer].RemoveChips(turnResult.Bet);
                     bets[currentPlayer] += turnResult.Bet;
                 }
 
                 currentPlayer++;
-                if(currentPlayer >= _playerStates.Count)
+                if(currentPlayer >= _players.Count)
                 {
                     currentPlayer = 0;
                 }
@@ -110,9 +101,9 @@ namespace PokerSim.Engine.Players
         private bool CheckBettingDone(int[] bets)
         {
             int currentMaxBet = bets.Max();
-            for(int i = 0; i < _playerStates.Count; ++i)
+            for(int i = 0; i < _players.Count; ++i)
             {
-                if(!_playerStates[i].HasFolded && bets[i] != currentMaxBet)
+                if(!_players[i].HasFolded && bets[i] != currentMaxBet)
                 {
                     return false;
                 }
