@@ -1,6 +1,7 @@
 ﻿using PokerSim.Engine.Decks;
 using PokerSim.Engine.Players;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PokerSim.Engine.Game
 {
@@ -73,25 +74,99 @@ namespace PokerSim.Engine.Game
                 }
             }
 
+            //Pre-flop betting
+            if(!DoBettingRound())
+            {
+                ResolveHand();
+                return;
+            }    
+
+            //Flop bets
+            for(int i = 0; i < 3; ++i)
+            {
+                _communityCards.Add(Deck.Draw());
+            }
+            if (!DoBettingRound())
+            {
+                ResolveHand();
+                return;
+            }
+
+            //Turn bets
+            _communityCards.Add(Deck.Draw());
+            if (!DoBettingRound())
+            {
+                ResolveHand();
+                return;
+            }
+
+            //River bets
+            _communityCards.Add(Deck.Draw());
+            DoBettingRound();
+            ResolveHand();
+        }
+
+        private void ResolveHand()
+        {
 
         }
 
-        private void DoBettingRound()
+        private bool DoBettingRound()
         {
-            int currentPlayerIndex = _startingPlayerIndex;
-
-            while (!CurrentPot.AreAllBetsIn)
+            bool everyoneBet = false;
+            while (!CurrentPot.AreAllBetsIn || !everyoneBet)
             {
-                currentPlayerIndex++;
-                if (currentPlayerIndex >= _players.Count)
+                _currentPlayerIndex++;
+                if (_currentPlayerIndex >= _players.Count)
                 {
-                    currentPlayerIndex = 0;
+                    _currentPlayerIndex = 0;
                 }
 
-                var player = _players[currentPlayerIndex];
-                var amountToCall = CurrentPot.ToCallAmount(player);
+                if(_currentPlayerIndex == _startingPlayerIndex)
+                {
+                    everyoneBet = true;
+                }
+
+                var player = _players[_currentPlayerIndex];
+                if (player.IsEliminated || player.HasFolded)
+                    continue;
+
+                var state = GetCurrentPlayerTurnState(player);
+                var result = player.Player.TakeTurn(state);
+                if(result.Decision == TurnDecisionType.Fold)
+                {
+                    player.Fold();
+                    CurrentPot.PlayerFold(player);
+                    if (AllPlayersFolded())
+                        return false;
+                    
+                }
+                else if(result.Decision == TurnDecisionType.CheckOrCall)
+                {
+                    CurrentPot.PlayerCallOrCheck(player);
+                }
+                else
+                {
+                    CurrentPot.PlayerRaise(player, result.RaiseAmount);
+                }
             }
 
+            return true;
+        }
+
+        private bool AllPlayersFolded()
+        {
+            return _players.Count(x => !x.HasFolded) <= 1;
+        }
+
+        private IPlayerTurnState GetCurrentPlayerTurnState(IPlayerState currentPlayer)
+        {
+            return new PlayerTurnState(CommunityCards,
+                currentPlayer.Cards,
+                CurrentPot.ToCallAmount(currentPlayer),
+                CurrentPot.TotalPotSize,
+                currentPlayer.ChipCount,
+                _players.Count(x => !x.IsEliminated && !x.HasFolded));
         }
 
 

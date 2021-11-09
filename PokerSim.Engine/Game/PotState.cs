@@ -56,7 +56,7 @@ namespace PokerSim.Engine.Game
             return MaxPlayerPotSize - _playerPot[player.PlayerId].PotSize;
         }
 
-        public void FoldPlayer(IPlayerState player)
+        public void PlayerFold(IPlayerState player)
         {
             if (!_playerPot.ContainsKey(player.PlayerId))
             {
@@ -64,6 +64,24 @@ namespace PokerSim.Engine.Game
             }
 
             _playerPot[player.PlayerId].HasFolded = true;
+        }
+
+        public void PlayerCallOrCheck(IPlayerState player)
+        {
+            var toCall = ToCallAmount(player);
+            if(toCall > 0)
+            {
+                AddToPot(player, toCall);
+            }
+        }
+
+        public void PlayerRaise(IPlayerState player, int amount)
+        {
+            var raise = ToCallAmount(player) + amount;
+            if (raise > 0)
+            {
+                AddToPot(player, raise);
+            }
         }
 
         public void PayoutPlayer(IPlayerState player)

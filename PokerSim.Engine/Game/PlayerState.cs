@@ -22,7 +22,7 @@ namespace PokerSim.Engine.Game
         private List<Card> _cards = new List<Card>();
         public IEnumerable<Card> Cards => _cards;
 
-        public bool IsFolded => !_cards.Any();
+        public bool HasFolded => !_cards.Any();
 
         public bool IsEliminated => ChipCount <= 0;
 

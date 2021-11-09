@@ -11,7 +11,7 @@ namespace PokerSim.Engine.Game
         IPlayer Player { get; }
         int ChipCount { get; set; }
         IEnumerable<Card> Cards { get; }
-        bool IsFolded { get; }
+        bool HasFolded { get; }
         bool IsEliminated { get; }
         void Deal(Card card);
         void Fold();
