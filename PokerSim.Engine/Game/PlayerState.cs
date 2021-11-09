@@ -3,8 +3,6 @@ using PokerSim.Engine.Players;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PokerSim.Engine.Game
 {
@@ -14,6 +12,7 @@ namespace PokerSim.Engine.Game
         {
             Player = player;
             ChipCount = initialChipCount;
+            PlayerId = Guid.NewGuid();
         }
 
         public IPlayer Player { get; private set; }
@@ -26,6 +25,8 @@ namespace PokerSim.Engine.Game
         public bool IsFolded => !_cards.Any();
 
         public bool IsEliminated => ChipCount <= 0;
+
+        public Guid PlayerId { get; private set; }
 
         public void Deal(Card card)
         {

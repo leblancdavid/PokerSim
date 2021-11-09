@@ -9,6 +9,7 @@ namespace PokerSim.Engine.Game
         Deck Deck { get; }
         IEnumerable<IPlayerState> Players { get; }
         IEnumerable<Card> CommunityCards { get; }
+        PotState CurrentPot { get; }
         int SmallBlindIndex { get; }
         int SmallBlindValue { get; }
         int BigBlindIndex { get; }
@@ -17,7 +18,7 @@ namespace PokerSim.Engine.Game
 
         void AddPlayer(IPlayer player);
 
-        void NewHand();
+        void PlayHand();
 
         void Play();
     }

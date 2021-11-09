@@ -7,6 +7,7 @@ namespace PokerSim.Engine.Game
     internal class GameEngine : IGameEngine
     {
         public Deck Deck { get; private set; }
+        public PotState CurrentPot { get; private set; }
 
         private List<IPlayerState> _players = new List<IPlayerState>();
         public IEnumerable<IPlayerState> Players => _players;
@@ -53,12 +54,46 @@ namespace PokerSim.Engine.Game
             }
         }
 
-        public void NewHand()
+        public void PlayHand()
         {
+            CurrentPot = new PotState();
             Deck = new Deck();
             Deck.Shuffle();
             UpdateBlinds();
+
+            CurrentPot.AddToPot(_players[SmallBlindIndex], SmallBlindValue);
+            CurrentPot.AddToPot(_players[BigBlindIndex], BigBlindValue);
+
+            //Each player gets 2 cards
+            for (int i = 0; i < 2; ++i)
+            {
+                foreach (var player in _players)
+                {
+                    player.Deal(Deck.Draw());
+                }
+            }
+
+
         }
+
+        private void DoBettingRound()
+        {
+            int currentPlayerIndex = _startingPlayerIndex;
+
+            while (!CurrentPot.AreAllBetsIn)
+            {
+                currentPlayerIndex++;
+                if (currentPlayerIndex >= _players.Count)
+                {
+                    currentPlayerIndex = 0;
+                }
+
+                var player = _players[currentPlayerIndex];
+                var amountToCall = CurrentPot.ToCallAmount(player);
+            }
+
+        }
+
 
         private void UpdateBlinds()
         {
