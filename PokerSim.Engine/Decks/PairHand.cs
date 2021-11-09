@@ -24,9 +24,17 @@ namespace PokerSim.Engine.Decks
         {
             var tempList = cards.ToList();
             //Todo how to finger this one out!
-            var pair = tempList.GroupBy(x => x.Value).Where(g => g.Count() == 2).Select(y => y.Key);
+            var pairGroup = tempList.GroupBy(x => x.Value).Where(g => g.Count() == 2).FirstOrDefault();
+            if(pairGroup == null)
+            {
+                //Invalid pair...
+                return new PairHand(new List<Card>(), new List<Card>());
+            }
 
-            return new PairHand(cards.OrderByDescending(x => x.Value).Take(5));
+            var pair = cards.Where(x => x.Value == pairGroup.Key);
+            tempList.RemoveAll(x => x.Value == pairGroup.Key);
+            
+            return new PairHand(pair, tempList.OrderByDescending(x => x.Value).Take(3));
         }
 
         public override bool IsValid => IsPairHand(Cards) && Cards.Count() == 5;
