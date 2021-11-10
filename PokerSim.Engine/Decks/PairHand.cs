@@ -30,7 +30,10 @@ namespace PokerSim.Engine.Decks
         {
             var tempList = cards.ToList();
             //Todo how to finger this one out!
-            var pairGroup = tempList.GroupBy(x => x.Value).Where(g => g.Count() == 2).FirstOrDefault();
+            var pairGroup = tempList.GroupBy(x => x.Value)
+                .Where(g => g.Count() == 2)
+                .OrderByDescending(x => x.Key)
+                .FirstOrDefault();
             if(pairGroup == null)
             {
                 //Invalid pair...
@@ -47,7 +50,7 @@ namespace PokerSim.Engine.Decks
 
         public static bool IsPairHand(IEnumerable<Card> cards)
         {
-            return cards.GroupBy(x => x.Value).Where(g => g.Count() == 2).Count() == 1;
+            return cards.GroupBy(x => x.Value).Where(g => g.Count() == 2).Count() >= 1;
         }
     }
 }
