@@ -42,7 +42,7 @@ namespace PokerSim.Engine.Decks
             string output = "";
             foreach(var card in Cards)
             {
-                output += card.ShortName;
+                output += card?.ShortName;
             }
             return output;
         }
