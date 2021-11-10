@@ -20,7 +20,7 @@ namespace PokerSim.Engine.Decks
 
             tempList.RemoveAll(x => x.Value == tripleGroup.Key);
             return new ThreeOfAKindHand(cards.Where(x => x.Value == tripleGroup.Key),
-                tempList.OrderByDescending(x => x.Value));
+                tempList.OrderByDescending(x => x.Value).Take(2));
         }
 
         public bool ContainsHand(IEnumerable<Card> cards)

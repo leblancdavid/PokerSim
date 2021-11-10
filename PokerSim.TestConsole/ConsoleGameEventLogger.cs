@@ -42,13 +42,20 @@ namespace PokerSim.TestConsole
 
         public void Log(TexasHoldemStages stage, IEnumerable<Card> communityCards)
         {
-            string str = stage.ToString() + ": ";
-            foreach(var card in communityCards)
+            
+            Console.WriteLine($"-========= {stage.ToString().ToUpper()} ===========-");
+            if(stage != TexasHoldemStages.PreFlop)
             {
-                str += card.ShortName + " ";
-            }
+                string str = "";
+                foreach (var card in communityCards)
+                {
+                    str += card.ShortName + " ";
+                }
 
-            Console.WriteLine(str);
+                Console.WriteLine(str);
+                Console.WriteLine($"-========= {stage.ToString().ToUpper()} ===========-");
+            }
+           
         }
     }
 }

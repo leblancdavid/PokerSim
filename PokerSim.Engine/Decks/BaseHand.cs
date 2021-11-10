@@ -20,7 +20,15 @@ namespace PokerSim.Engine.Decks
 
         public int CompareTo(IHand other)
         {
-            if (other == null || Score > other.Score)
+            if (other == null)
+                return 1;
+
+            if(HandType != other.HandType)
+            {
+                return (int)HandType > (int)other.HandType ? 1 : -1;
+            }
+
+            if (Score > other.Score)
                 return 1;
 
             if (Score == other.Score)

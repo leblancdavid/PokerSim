@@ -54,7 +54,10 @@ namespace PokerSim.Engine.Decks
             }
             scoreFactor /= 10;
 
-            Score += scoreFactor * card.Value;
+            if(card != null)
+            {
+                Score += scoreFactor * card.Value;
+            }
         }
 
         public override bool IsValid => IsTwoPairHand(Cards) && Cards.Count() == 5;

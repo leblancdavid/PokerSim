@@ -93,7 +93,7 @@ namespace PokerSim.Engine.Game
             //Pre-flop betting
             if (!DoBettingRound())
             {
-                ResolveHand();
+                _logger.Log(ResolveHand());
                 return;
             }    
 
@@ -107,7 +107,7 @@ namespace PokerSim.Engine.Game
             _logger.Log(_currentStage, CommunityCards);
             if (!DoBettingRound())
             {
-                ResolveHand();
+                _logger.Log(ResolveHand());
                 return;
             }
 
@@ -117,7 +117,7 @@ namespace PokerSim.Engine.Game
             _logger.Log(_currentStage, CommunityCards);
             if (!DoBettingRound())
             {
-                ResolveHand();
+                _logger.Log(ResolveHand());
                 return;
             }
 
@@ -147,7 +147,8 @@ namespace PokerSim.Engine.Game
             var playerResults = new List<PlayerHandResult>();
             foreach(var player in remainingPlayers)
             {
-                playerResults.Add(new PlayerHandResult(player.Player, HandBuilder.BuildHand(player.Cards.Concat(CommunityCards))));
+                playerResults.Add(new PlayerHandResult(player.Player, HandBuilder.BuildHand(player.Cards.ToList().Concat(CommunityCards))));
+                player.Fold();
             }
 
             playerResults = playerResults.OrderByDescending(x => x.Hand).ToList();
