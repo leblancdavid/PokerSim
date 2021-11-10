@@ -13,7 +13,13 @@ namespace PokerSim.Engine.Decks
         {
             Score = 0;
             long scoreFactor = 100000;
-            foreach (var card in Cards)
+            foreach(var pairCard in pair)
+            {
+                Score += scoreFactor * pairCard.Value;
+            }
+            scoreFactor /= 10;
+
+            foreach (var card in cards)
             {
                 Score += scoreFactor * card.Value;
                 scoreFactor /= 10;
@@ -41,7 +47,7 @@ namespace PokerSim.Engine.Decks
 
         public static bool IsPairHand(IEnumerable<Card> cards)
         {
-            return cards.Distinct().Count() == cards.Count() - 1;
+            return cards.GroupBy(x => x.Value).Where(g => g.Count() == 2).Count() == 1;
         }
     }
 }
