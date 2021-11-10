@@ -27,43 +27,43 @@ namespace PokerSim.Engine.Game
 
         public void AddToPot(IPlayerState player, int amount)
         {
-            if(!_playerPot.ContainsKey(player.PlayerId))
+            if(!_playerPot.ContainsKey(player.Player.Id))
             {
-                _playerPot.Add(player.PlayerId, new PlayerPotState());
+                _playerPot.Add(player.Player.Id, new PlayerPotState());
             }
 
             if(amount >= player.ChipCount)
             {
-                _playerPot[player.PlayerId].PotSize += player.ChipCount;
-                _playerPot[player.PlayerId].IsAllIn = true;
+                _playerPot[player.Player.Id].PotSize += player.ChipCount;
+                _playerPot[player.Player.Id].IsAllIn = true;
                 player.ChipCount = 0;
             }
             else
             {
-                _playerPot[player.PlayerId].PotSize += amount;
-                _playerPot[player.PlayerId].IsAllIn = false;
+                _playerPot[player.Player.Id].PotSize += amount;
+                _playerPot[player.Player.Id].IsAllIn = false;
                 player.ChipCount -= amount;
             }
         }
 
         public int ToCallAmount(IPlayerState player)
         {
-            if (!_playerPot.ContainsKey(player.PlayerId))
+            if (!_playerPot.ContainsKey(player.Player.Id))
             {
                 return MaxPlayerPotSize;
             }
 
-            return MaxPlayerPotSize - _playerPot[player.PlayerId].PotSize;
+            return MaxPlayerPotSize - _playerPot[player.Player.Id].PotSize;
         }
 
         public void PlayerFold(IPlayerState player)
         {
-            if (!_playerPot.ContainsKey(player.PlayerId))
+            if (!_playerPot.ContainsKey(player.Player.Id))
             {
                 return;
             }
 
-            _playerPot[player.PlayerId].HasFolded = true;
+            _playerPot[player.Player.Id].HasFolded = true;
         }
 
         public void PlayerCallOrCheck(IPlayerState player)
@@ -86,10 +86,10 @@ namespace PokerSim.Engine.Game
 
         public int PayoutPlayer(IPlayerState player)
         {
-            if (!_playerPot.ContainsKey(player.PlayerId))
+            if (!_playerPot.ContainsKey(player.Player.Id))
                 return 0;
 
-            var playerPotSize = _playerPot[player.PlayerId].PotSize;
+            var playerPotSize = _playerPot[player.Player.Id].PotSize;
             int totalGains = 0;
             foreach(var pot in _playerPot)
             {

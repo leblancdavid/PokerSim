@@ -7,7 +7,6 @@ namespace PokerSim.Engine.Game
 {
     internal interface IPlayerState
     {
-        Guid PlayerId { get; }
         IPlayer Player { get; }
         int ChipCount { get; set; }
         IEnumerable<Card> Cards { get; }

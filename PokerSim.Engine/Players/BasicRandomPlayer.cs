@@ -18,9 +18,12 @@ namespace PokerSim.Engine.Players
             _checkCallProb = checkCallProb;
             _raiseProb = raiseProb;
             Name = name;
+            Id = Guid.NewGuid();
         }
 
         public string Name { get; private set; }
+
+        public Guid Id { get; private set; }
 
         public TurnResult TakeTurn(IPlayerTurnState state)
         {
@@ -29,17 +32,17 @@ namespace PokerSim.Engine.Players
             {
                 if (state.CurrentBet == 0)
                 {
-                    return TurnResult.CheckOrCall();
+                    return TurnResult.CheckOrCall(Id);
                 }
-                return TurnResult.Fold();
+                return TurnResult.Fold(Id);
             }
 
             if(p < _foldProb + _checkCallProb)
             {
-                return TurnResult.CheckOrCall();
+                return TurnResult.CheckOrCall(Id);
             }
 
-            return TurnResult.Raise(state.Blinds * 3);
+            return TurnResult.Raise(Id, state.Blinds * 3);
         }
     }
 }
