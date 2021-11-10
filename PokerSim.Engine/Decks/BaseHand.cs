@@ -18,10 +18,15 @@ namespace PokerSim.Engine.Decks
             HandType = handType;
         }
 
-
         public int CompareTo(IHand other)
         {
-            throw new NotImplementedException();
+            if (other == null || Score > other.Score)
+                return 1;
+
+            if (Score == other.Score)
+                return 0;
+
+            return -1;
         }
     }
 }

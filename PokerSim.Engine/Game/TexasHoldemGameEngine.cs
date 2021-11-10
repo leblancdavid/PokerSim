@@ -5,8 +5,9 @@ using System.Linq;
 
 namespace PokerSim.Engine.Game
 {
-    internal class GameEngine : IGameEngine
+    internal class TexasHoldemGameEngine : IGameEngine
     {
+        public IHandBuilder HandBuilder { get; private set; }
         public Deck Deck { get; private set; }
         public PotState CurrentPot { get; private set; }
 
@@ -30,7 +31,7 @@ namespace PokerSim.Engine.Game
         private int _currentPlayerIndex = 1;
 
         private int _initialChips = 1000;
-        public GameEngine()
+        public TexasHoldemGameEngine()
         {
             SmallBlindIndex = -1;
             SmallBlindValue = 1;
@@ -39,6 +40,7 @@ namespace PokerSim.Engine.Game
             _startingPlayerIndex = 1;
             _currentPlayerIndex = 1;
             Deck = new Deck();
+            HandBuilder = new HandBuilder();
         }
 
         public void AddPlayer(IPlayer player)
@@ -70,7 +72,10 @@ namespace PokerSim.Engine.Game
             {
                 foreach (var player in _players)
                 {
-                    player.Deal(Deck.Draw());
+                    if(!player.IsEliminated)
+                    {
+                        player.Deal(Deck.Draw());
+                    }
                 }
             }
 
@@ -108,7 +113,24 @@ namespace PokerSim.Engine.Game
 
         private void ResolveHand()
         {
+            var remainingPlayers = _players.Where(x => !x.HasFolded);
+            if(remainingPlayers.Count() == 1)
+            {
+                CurrentPot.PayoutPlayer(remainingPlayers.FirstOrDefault());
+                return;
+            }
 
+            var hands = new List<(IPlayerState Player, IHand Hand)>();
+            foreach(var player in remainingPlayers)
+            {
+                hands.Add((player, HandBuilder.BuildHand(player.Cards.Concat(CommunityCards))));
+            }
+
+            hands = hands.OrderByDescending(x => x.Hand.Score).ToList();
+            foreach (var hand in hands)
+            {
+                CurrentPot.PayoutPlayer(hand.Player);
+            }
         }
 
         private bool DoBettingRound()

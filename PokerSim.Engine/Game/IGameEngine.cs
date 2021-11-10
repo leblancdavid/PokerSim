@@ -6,6 +6,7 @@ namespace PokerSim.Engine.Game
 {
     internal interface IGameEngine
     {
+        IHandBuilder HandBuilder { get; }
         Deck Deck { get; }
         IEnumerable<IPlayerState> Players { get; }
         IEnumerable<Card> CommunityCards { get; }
