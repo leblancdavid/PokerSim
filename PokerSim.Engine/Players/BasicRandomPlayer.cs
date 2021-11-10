@@ -12,12 +12,15 @@ namespace PokerSim.Engine.Players
         private double _raiseProb;
         private Random _random = new Random();
 
-        public BasicRandomPlayer(double foldProb, double checkCallProb, double raiseProb)
+        public BasicRandomPlayer(string name, double foldProb, double checkCallProb, double raiseProb)
         {
             _foldProb = foldProb;
             _checkCallProb = checkCallProb;
             _raiseProb = raiseProb;
+            Name = name;
         }
+
+        public string Name { get; private set; }
 
         public TurnResult TakeTurn(IPlayerTurnState state)
         {

@@ -84,18 +84,22 @@ namespace PokerSim.Engine.Game
             }
         }
 
-        public void PayoutPlayer(IPlayerState player)
+        public int PayoutPlayer(IPlayerState player)
         {
             if (!_playerPot.ContainsKey(player.PlayerId))
-                return;
+                return 0;
 
             var playerPotSize = _playerPot[player.PlayerId].PotSize;
+            int totalGains = 0;
             foreach(var pot in _playerPot)
             {
                 var gains = Math.Min(playerPotSize, pot.Value.PotSize);
                 pot.Value.PotSize -= gains;
                 player.ChipCount += gains;
+                totalGains += gains;
             }
+
+            return totalGains;
         }
     }
 }

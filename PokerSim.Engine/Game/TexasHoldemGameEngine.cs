@@ -117,26 +117,35 @@ namespace PokerSim.Engine.Game
             ResolveHand();
         }
 
-        private void ResolveHand()
+        private HandResult ResolveHand()
         {
             var remainingPlayers = _players.Where(x => !x.HasFolded);
             if(remainingPlayers.Count() == 1)
             {
-                CurrentPot.PayoutPlayer(remainingPlayers.FirstOrDefault());
-                return;
+                var player = remainingPlayers.FirstOrDefault();
+                return new HandResult(new List<PlayerHandResult>()
+                {
+                    new PlayerHandResult(
+                        player.PlayerId, 
+                        player.Player, 
+                        HandBuilder.BuildHand(player.Cards.Concat(CommunityCards)),
+                        CurrentPot.PayoutPlayer(player))
+                });
             }
 
-            var hands = new List<(IPlayerState Player, IHand Hand)>();
+            var playerResults = new List<PlayerHandResult>();
             foreach(var player in remainingPlayers)
             {
-                hands.Add((player, HandBuilder.BuildHand(player.Cards.Concat(CommunityCards))));
+                playerResults.Add(new PlayerHandResult(player.PlayerId, player.Player, HandBuilder.BuildHand(player.Cards.Concat(CommunityCards))));
             }
 
-            hands = hands.OrderByDescending(x => x.Hand.Score).ToList();
-            foreach (var hand in hands)
+            playerResults = playerResults.OrderByDescending(x => x.Hand).ToList();
+            foreach (var result in playerResults)
             {
-                CurrentPot.PayoutPlayer(hand.Player);
+                result.Winnings = CurrentPot.PayoutPlayer(_players.FirstOrDefault(x => x.PlayerId == result.PlayerId));
             }
+
+            return new HandResult(playerResults);
         }
 
         private bool DoBettingRound()
