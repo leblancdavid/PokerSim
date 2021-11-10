@@ -147,13 +147,10 @@ namespace PokerSim.Engine.Game
             var playerResults = remainingPlayers.Select(x => 
                 new PlayerHandResult(x.Player, 
                     HandBuilder.BuildHand(x.Cards.ToList().Concat(CommunityCards))))
+                .OrderByDescending(x => x.Hand)
                 .ToList();
 
-            playerResults = playerResults.OrderByDescending(x => x.Hand).ToList();
-            foreach (var result in playerResults)
-            {
-                result.Winnings = CurrentPot.PayoutPlayer(result.Player.Id);
-            }
+            CurrentPot.PayoutPlayers(playerResults);
 
             //Update player status at the end of the hand
             foreach (var player in remainingPlayers)

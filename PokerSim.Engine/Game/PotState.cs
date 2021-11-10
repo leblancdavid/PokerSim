@@ -91,7 +91,7 @@ namespace PokerSim.Engine.Game
             }
         }
 
-        public int PayoutPlayer(Guid playerId)
+        public int PayoutPlayer(Guid playerId, double splitRatio = 1.0)
         {
             if (!_playerPot.ContainsKey(playerId))
                 return 0;
@@ -101,7 +101,7 @@ namespace PokerSim.Engine.Game
             var player = _playerStates.FirstOrDefault(x => x.Player.Id == playerId);
             foreach (var pot in _playerPot)
             {
-                var gains = Math.Min(playerPotSize, pot.Value.PotSize);
+                var gains = (int)Math.Ceiling(Math.Min(playerPotSize, pot.Value.PotSize) * splitRatio - 0.5);
                 pot.Value.PotSize -= gains;
                 player.ChipCount += gains;
                 totalGains += gains;
@@ -110,18 +110,16 @@ namespace PokerSim.Engine.Game
             return totalGains;
         }
 
-        public void PayoutPlayers(List<PlayerHandResult> results)
+        public void PayoutPlayers(IEnumerable<PlayerHandResult> results)
         {
             var groupedResults = results.OrderByDescending(x => x.Hand).GroupBy(x => x.Hand.Score).ToList();
             foreach(var group in groupedResults)
             {
-                if(group.Count() == 1)
+                foreach (var result in group)
                 {
-                    var result = group.FirstOrDefault();
-                    //result.Winnings = PayoutPlayer(
+                    result.Winnings = PayoutPlayer(result.Player.Id, 1.0 / group.Count());
                 }
             }
-
         }
 
     }
