@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using PokerSim.Engine.Decks;
 using PokerSim.Engine.Game;
 
 namespace PokerSim.Engine.Players
@@ -12,12 +10,18 @@ namespace PokerSim.Engine.Players
         private double _raiseProb;
         private Random _random = new Random();
 
-        public BasicRandomPlayer(double foldProb, double checkCallProb, double raiseProb)
+        public BasicRandomPlayer(string name, double foldProb, double checkCallProb, double raiseProb)
         {
             _foldProb = foldProb;
             _checkCallProb = checkCallProb;
             _raiseProb = raiseProb;
+            Name = name;
+            Id = Guid.NewGuid();
         }
+
+        public string Name { get; private set; }
+
+        public Guid Id { get; private set; }
 
         public TurnResult TakeTurn(IPlayerTurnState state)
         {
@@ -26,17 +30,17 @@ namespace PokerSim.Engine.Players
             {
                 if (state.CurrentBet == 0)
                 {
-                    return TurnResult.CheckOrCall();
+                    return TurnResult.CheckOrCall(this);
                 }
-                return TurnResult.Fold();
+                return TurnResult.Fold(this);
             }
 
             if(p < _foldProb + _checkCallProb)
             {
-                return TurnResult.CheckOrCall();
+                return TurnResult.CheckOrCall(this);
             }
 
-            return TurnResult.Raise(state.Blinds * 3);
+            return TurnResult.Raise(this, state.Blinds * 3);
         }
     }
 }

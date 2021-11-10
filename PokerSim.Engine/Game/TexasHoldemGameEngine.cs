@@ -27,17 +27,21 @@ namespace PokerSim.Engine.Game
 
         public int CurrentPlayerIndex { get; private set; }
 
-        private int _startingPlayerIndex = 1;
+        private int _lastBettingPlayerIndex = 1;
         private int _currentPlayerIndex = 1;
 
         private int _initialChips = 1000;
-        public TexasHoldemGameEngine()
+        private TexasHoldemStages _currentStage;
+        private IGameEventLogger _logger;
+        public TexasHoldemGameEngine(IGameEventLogger logger)
         {
+            _logger = logger;
+
             SmallBlindIndex = -1;
             SmallBlindValue = 1;
             BigBlindIndex = 0;
             BigBlindValue = 2;
-            _startingPlayerIndex = 1;
+            _lastBettingPlayerIndex = BigBlindIndex;
             _currentPlayerIndex = 1;
             Deck = new Deck();
             HandBuilder = new HandBuilder();
@@ -84,11 +88,12 @@ namespace PokerSim.Engine.Game
                     }
                 }
             }
-
+            _currentStage = TexasHoldemStages.PreFlop;
+            _logger.Log(_currentStage, CommunityCards);
             //Pre-flop betting
-            if(!DoBettingRound())
+            if (!DoBettingRound())
             {
-                ResolveHand();
+                _logger.Log(ResolveHand());
                 return;
             }    
 
@@ -97,46 +102,62 @@ namespace PokerSim.Engine.Game
             {
                 _communityCards.Add(Deck.Draw());
             }
+
+            _currentStage = TexasHoldemStages.Flop;
+            _logger.Log(_currentStage, CommunityCards);
             if (!DoBettingRound())
             {
-                ResolveHand();
+                _logger.Log(ResolveHand());
                 return;
             }
 
             //Turn bets
             _communityCards.Add(Deck.Draw());
+            _currentStage = TexasHoldemStages.Turn;
+            _logger.Log(_currentStage, CommunityCards);
             if (!DoBettingRound())
             {
-                ResolveHand();
+                _logger.Log(ResolveHand());
                 return;
             }
 
             //River bets
             _communityCards.Add(Deck.Draw());
+            _currentStage = TexasHoldemStages.River;
+            _logger.Log(_currentStage, CommunityCards);
             DoBettingRound();
-            ResolveHand();
+            _logger.Log(ResolveHand());
         }
 
-        private void ResolveHand()
+        private HandResult ResolveHand()
         {
             var remainingPlayers = _players.Where(x => !x.HasFolded);
             if(remainingPlayers.Count() == 1)
             {
-                CurrentPot.PayoutPlayer(remainingPlayers.FirstOrDefault());
-                return;
+                var player = remainingPlayers.FirstOrDefault();
+                return new HandResult(new List<PlayerHandResult>()
+                {
+                    new PlayerHandResult(
+                        player.Player, 
+                        HandBuilder.BuildHand(player.Cards.Concat(CommunityCards)),
+                        CurrentPot.PayoutPlayer(player))
+                });
             }
 
-            var hands = new List<(IPlayerState Player, IHand Hand)>();
+            var playerResults = new List<PlayerHandResult>();
             foreach(var player in remainingPlayers)
             {
-                hands.Add((player, HandBuilder.BuildHand(player.Cards.Concat(CommunityCards))));
+                playerResults.Add(new PlayerHandResult(player.Player, HandBuilder.BuildHand(player.Cards.ToList().Concat(CommunityCards))));
+                player.Fold();
             }
 
-            hands = hands.OrderByDescending(x => x.Hand.Score).ToList();
-            foreach (var hand in hands)
+            playerResults = playerResults.OrderByDescending(x => x.Hand).ToList();
+            foreach (var result in playerResults)
             {
-                CurrentPot.PayoutPlayer(hand.Player);
+                result.Winnings = CurrentPot.PayoutPlayer(_players.FirstOrDefault(x => x.Player.Id == result.Player.Id));
             }
+
+            return new HandResult(playerResults);
         }
 
         private bool DoBettingRound()
@@ -144,13 +165,11 @@ namespace PokerSim.Engine.Game
             bool everyoneBet = false;
             while (!CurrentPot.AreAllBetsIn || !everyoneBet)
             {
-                
-
                 var player = _players[_currentPlayerIndex];
                 if (player.IsEliminated || player.HasFolded)
                 {
                     NextPlayer();
-                    if (_currentPlayerIndex == _startingPlayerIndex)
+                    if (_currentPlayerIndex == _lastBettingPlayerIndex)
                     {
                         everyoneBet = true;
                     }
@@ -159,7 +178,10 @@ namespace PokerSim.Engine.Game
 
                 var state = GetCurrentPlayerTurnState(player);
                 var result = player.Player.TakeTurn(state);
-                if(result.Decision == TurnDecisionType.Fold)
+                
+                _logger.Log(result);
+                
+                if (result.Decision == TurnDecisionType.Fold)
                 {
                     player.Fold();
                     CurrentPot.PlayerFold(player);
@@ -173,14 +195,16 @@ namespace PokerSim.Engine.Game
                 }
                 else
                 {
+                    _lastBettingPlayerIndex = _currentPlayerIndex;
                     CurrentPot.PlayerRaise(player, result.RaiseAmount);
                 }
 
-                NextPlayer(); 
-                if (_currentPlayerIndex == _startingPlayerIndex)
+                NextPlayer();
+                if (_currentPlayerIndex == _lastBettingPlayerIndex)
                 {
                     everyoneBet = true;
                 }
+
             }
 
             return true;
@@ -204,6 +228,7 @@ namespace PokerSim.Engine.Game
         {
             return new PlayerTurnState(CommunityCards,
                 currentPlayer.Cards,
+                _currentStage,
                 CurrentPot.ToCallAmount(currentPlayer),
                 CurrentPot.TotalPotSize,
                 BigBlindValue,
@@ -224,12 +249,14 @@ namespace PokerSim.Engine.Game
             {
                 BigBlindIndex = 0;
             }
-            _startingPlayerIndex = BigBlindIndex + 1;
-            if (_startingPlayerIndex >= _players.Count)
+
+            _lastBettingPlayerIndex = BigBlindIndex;
+
+            _currentPlayerIndex = _lastBettingPlayerIndex + 1;
+            if (_currentPlayerIndex >= _players.Count)
             {
-                _startingPlayerIndex = 0;
+                _currentPlayerIndex = 0;
             }
-            _currentPlayerIndex = _startingPlayerIndex;
         }
     }
 }

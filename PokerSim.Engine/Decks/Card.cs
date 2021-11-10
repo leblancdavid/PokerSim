@@ -1,11 +1,11 @@
-namespace PokerSim.Engine.Decks
+﻿namespace PokerSim.Engine.Decks
 {
     public class Card
     {
         public int Id { get; private set; }
         public CardSuit Suit { get; private set; }
         public int Value { get; private set; }
-        public string Name 
+        public string FullName 
         {
             get
             {
@@ -22,6 +22,43 @@ namespace PokerSim.Engine.Decks
                     default:
                         return $"{Value} of {Suit.ToString()}";
                 }
+            }
+        }
+
+        public string ShortName
+        {
+            get
+            {
+                switch (Value)
+                {
+                    case 11:
+                        return $"J{SuitToCharacter(Suit)}";
+                    case 12:
+                        return $"Q{SuitToCharacter(Suit)}";
+                    case 13:
+                        return $"K{SuitToCharacter(Suit)}";
+                    case 14:
+                        return $"A{SuitToCharacter(Suit)}";
+                    default:
+                        return $"{Value}{SuitToCharacter(Suit)}";
+                }
+            }
+        }
+
+        public static string SuitToCharacter(CardSuit suit)
+        {
+            switch (suit)
+            {
+                case CardSuit.Heart:
+                    return "\u2665";
+                case CardSuit.Spade:
+                    return "\u2660";
+                case CardSuit.Club:
+                    return "\u2663";
+                case CardSuit.Diamond:
+                    return "\u2666";
+                default:
+                    return "";
             }
         }
 

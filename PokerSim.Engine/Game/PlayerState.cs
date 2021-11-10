@@ -12,7 +12,6 @@ namespace PokerSim.Engine.Game
         {
             Player = player;
             ChipCount = initialChipCount;
-            PlayerId = Guid.NewGuid();
         }
 
         public IPlayer Player { get; private set; }
@@ -25,8 +24,6 @@ namespace PokerSim.Engine.Game
         public bool HasFolded => !_cards.Any();
 
         public bool IsEliminated => ChipCount <= 0;
-
-        public Guid PlayerId { get; private set; }
 
         public void Deal(Card card)
         {
