@@ -18,13 +18,6 @@ namespace PokerSim.Engine.Game
 
         public int TotalPotSize => _playerPot.Values.Sum(x => x.PotSize);
         public int MaxPlayerPotSize => _playerPot.Values.Max(x => x.PotSize);
-        public bool AreAllBetsIn
-        {
-            get
-            {
-                return _playerPot.Values.Where(x => !x.IsAllIn && !x.HasFolded).Select(x => x.PotSize).Distinct().Count() == 1;
-            }
-        }
 
         private IEnumerable<IPlayerState> _playerStates;
         public PotState(IEnumerable<IPlayerState> playerStates)

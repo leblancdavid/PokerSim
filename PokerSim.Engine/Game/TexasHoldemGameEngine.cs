@@ -30,7 +30,7 @@ namespace PokerSim.Engine.Game
         private int _lastBettingPlayerIndex = 1;
         private int _currentPlayerIndex = 1;
 
-        private int _initialChips = 1000;
+        private int _initialChips = 100;
         private TexasHoldemStages _currentStage;
         private IGameEventLogger _logger;
         public TexasHoldemGameEngine(IGameEventLogger logger)
@@ -163,7 +163,9 @@ namespace PokerSim.Engine.Game
         private bool DoBettingRound()
         {
             bool everyoneBet = false;
-            while (!CurrentPot.AreAllBetsIn || !everyoneBet)
+            int remainingPlayers = _players.Count(x => !x.IsEliminated && !x.HasFolded);
+            int turnCount = 0;
+            while (!everyoneBet || turnCount < remainingPlayers)
             {
                 var player = _players[_currentPlayerIndex];
                 if (player.IsEliminated || player.HasFolded)
@@ -204,7 +206,7 @@ namespace PokerSim.Engine.Game
                 {
                     everyoneBet = true;
                 }
-
+                turnCount++;
             }
 
             return true;
