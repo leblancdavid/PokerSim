@@ -11,14 +11,14 @@ namespace PokerSim.Engine.Decks
             {
                 switch(Value)
                 {
-                    case 1:
-                        return $"Ace of {Suit.ToString()}";
-                    case 10:
-                        return $"Jack of {Suit.ToString()}";
                     case 11:
-                        return $"Queen of {Suit.ToString()}";
+                        return $"Jack of {Suit.ToString()}";
                     case 12:
+                        return $"Queen of {Suit.ToString()}";
+                    case 13:
                         return $"King of {Suit.ToString()}";
+                    case 14:
+                        return $"Ace of {Suit.ToString()}";
                     default:
                         return $"{Value} of {Suit.ToString()}";
                 }

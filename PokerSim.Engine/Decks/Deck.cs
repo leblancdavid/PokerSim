@@ -43,7 +43,7 @@ namespace PokerSim.Engine.Decks
             int id = 1;
             foreach(var suit in suits)
             {
-                for(int i = 1; i <= 13; ++i)
+                for(int i = 2; i <= 14; ++i)
                 {
                     _cards.Add(new Card(id, suit, i));
                     ++id;
