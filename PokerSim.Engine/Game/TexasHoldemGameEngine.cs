@@ -30,7 +30,7 @@ namespace PokerSim.Engine.Game
         private int _lastBettingPlayerIndex = 1;
         private int _currentPlayerIndex = 1;
 
-        private int _initialChips = 1000;
+        private int _initialChips = 100;
         private TexasHoldemStages _currentStage;
         private IGameEventLogger _logger;
         public TexasHoldemGameEngine(IGameEventLogger logger)
@@ -68,14 +68,14 @@ namespace PokerSim.Engine.Game
 
         public void PlayHand()
         {
-            CurrentPot = new PotState();
+            CurrentPot = new PotState(_players);
             _communityCards.Clear();
             Deck = new Deck();
             Deck.Shuffle();
             UpdateBlinds();
 
-            CurrentPot.AddToPot(_players[SmallBlindIndex], SmallBlindValue);
-            CurrentPot.AddToPot(_players[BigBlindIndex], BigBlindValue);
+            CurrentPot.AddToPot(_players[SmallBlindIndex].Player.Id, SmallBlindValue);
+            CurrentPot.AddToPot(_players[BigBlindIndex].Player.Id, BigBlindValue);
 
             //Each player gets 2 cards
             for (int i = 0; i < 2; ++i)
@@ -140,21 +140,23 @@ namespace PokerSim.Engine.Game
                     new PlayerHandResult(
                         player.Player, 
                         HandBuilder.BuildHand(player.Cards.Concat(CommunityCards)),
-                        CurrentPot.PayoutPlayer(player))
+                        CurrentPot.PayoutPlayer(player.Player.Id))
                 });
             }
 
-            var playerResults = new List<PlayerHandResult>();
-            foreach(var player in remainingPlayers)
-            {
-                playerResults.Add(new PlayerHandResult(player.Player, HandBuilder.BuildHand(player.Cards.ToList().Concat(CommunityCards))));
-                player.Fold();
-            }
+            var playerResults = remainingPlayers.Select(x => 
+                new PlayerHandResult(x.Player, 
+                    HandBuilder.BuildHand(x.Cards.ToList().Concat(CommunityCards))))
+                .OrderByDescending(x => x.Hand)
+                .ToList();
 
-            playerResults = playerResults.OrderByDescending(x => x.Hand).ToList();
-            foreach (var result in playerResults)
+            CurrentPot.PayoutPlayers(playerResults);
+
+            //Update player status at the end of the hand
+            foreach (var player in remainingPlayers)
             {
-                result.Winnings = CurrentPot.PayoutPlayer(_players.FirstOrDefault(x => x.Player.Id == result.Player.Id));
+                player.Fold();
+                player.IsAllIn = false;
             }
 
             return new HandResult(playerResults);
@@ -163,7 +165,17 @@ namespace PokerSim.Engine.Game
         private bool DoBettingRound()
         {
             bool everyoneBet = false;
-            while (!CurrentPot.AreAllBetsIn || !everyoneBet)
+            int remainingPlayers = _players.Count(x => !x.HasFolded);
+            if (remainingPlayers == 1)
+                return false;
+
+            //If everyone remaining in the hand is all in, no reason to do any betting.
+            int allInPlayers = _players.Count(x => x.IsAllIn);
+            if (remainingPlayers - allInPlayers <= 1)
+                return true;
+
+            int turnCount = 0;
+            while (!everyoneBet || turnCount < remainingPlayers)
             {
                 var player = _players[_currentPlayerIndex];
                 if (player.IsEliminated || player.HasFolded)
@@ -184,19 +196,20 @@ namespace PokerSim.Engine.Game
                 if (result.Decision == TurnDecisionType.Fold)
                 {
                     player.Fold();
-                    CurrentPot.PlayerFold(player);
+                    CurrentPot.PlayerFold(player.Player.Id);
                     if (AllPlayersFolded())
                         return false;
                     
                 }
                 else if(result.Decision == TurnDecisionType.CheckOrCall)
                 {
-                    CurrentPot.PlayerCallOrCheck(player);
+                    CurrentPot.PlayerCallOrCheck(player.Player.Id);
                 }
                 else
                 {
                     _lastBettingPlayerIndex = _currentPlayerIndex;
-                    CurrentPot.PlayerRaise(player, result.RaiseAmount);
+                    everyoneBet = false;
+                    CurrentPot.PlayerRaise(player.Player.Id, result.RaiseAmount);
                 }
 
                 NextPlayer();
@@ -204,7 +217,7 @@ namespace PokerSim.Engine.Game
                 {
                     everyoneBet = true;
                 }
-
+                turnCount++;
             }
 
             return true;
@@ -229,7 +242,7 @@ namespace PokerSim.Engine.Game
             return new PlayerTurnState(CommunityCards,
                 currentPlayer.Cards,
                 _currentStage,
-                CurrentPot.ToCallAmount(currentPlayer),
+                CurrentPot.ToCallAmount(currentPlayer.Player.Id),
                 CurrentPot.TotalPotSize,
                 BigBlindValue,
                 currentPlayer.ChipCount,
