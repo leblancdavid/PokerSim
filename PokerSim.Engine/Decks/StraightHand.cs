@@ -30,12 +30,12 @@ namespace PokerSim.Engine.Decks
                 return new StraightHand(new List<Card>());
             }
 
-            return new StraightHand(straight.Take(5));
+            return new StraightHand(straight.OrderByDescending(x => x.Value).Take(5));
         }
 
         public bool ContainsHand(IEnumerable<Card> cards)
         {
-            var distinct = cards.Select(x => x.Value).Distinct().OrderBy(x => x).ToList();
+            var distinct = cards.Select(x => x.Value).Distinct().OrderByDescending(x => x).ToList();
             bool containsStraight = false;
             for(int i = 0; i < distinct.Count - 5; ++i)
             {
@@ -43,7 +43,7 @@ namespace PokerSim.Engine.Decks
                 containsStraight = true;
                 for (int j = i + 1; j < distinct.Count; ++j)
                 {
-                    val++;
+                    val--;
                     if(distinct[j] != val)
                     {
                         containsStraight = false;
@@ -73,7 +73,7 @@ namespace PokerSim.Engine.Decks
 
         private static bool IsStraightHand(IEnumerable<Card> cards)
         {
-            var distinct = cards.Select(x => x.Value).Distinct().OrderBy(x => x).ToList();
+            var distinct = cards.Select(x => x.Value).Distinct().OrderByDescending(x => x).ToList();
             bool containsStraight = false;
             for (int i = 0; i < distinct.Count - 5; ++i)
             {
@@ -81,7 +81,7 @@ namespace PokerSim.Engine.Decks
                 containsStraight = true;
                 for (int j = i + 1; j < distinct.Count; ++j)
                 {
-                    val++;
+                    val--;
                     if (distinct[j] != val)
                     {
                         containsStraight = false;
