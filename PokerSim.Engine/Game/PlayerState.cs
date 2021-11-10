@@ -25,6 +25,8 @@ namespace PokerSim.Engine.Game
 
         public bool IsEliminated => ChipCount <= 0;
 
+        public bool IsAllIn { get; set; }
+
         public void Deal(Card card)
         {
             _cards.Add(card);

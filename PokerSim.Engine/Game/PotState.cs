@@ -41,12 +41,14 @@ namespace PokerSim.Engine.Game
             {
                 _playerPot[playerId].PotSize += player.ChipCount;
                 _playerPot[playerId].IsAllIn = true;
+                player.IsAllIn = true;
                 player.ChipCount = 0;
             }
             else
             {
                 _playerPot[player.Player.Id].PotSize += amount;
                 _playerPot[player.Player.Id].IsAllIn = false;
+                player.IsAllIn = false;
                 player.ChipCount -= amount;
             }
         }

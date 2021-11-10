@@ -12,6 +12,7 @@ namespace PokerSim.Engine.Game
         IEnumerable<Card> Cards { get; }
         bool HasFolded { get; }
         bool IsEliminated { get; }
+        bool IsAllIn { get; set; }
         void Deal(Card card);
         void Fold();
     }

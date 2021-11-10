@@ -144,17 +144,22 @@ namespace PokerSim.Engine.Game
                 });
             }
 
-            var playerResults = new List<PlayerHandResult>();
-            foreach(var player in remainingPlayers)
-            {
-                playerResults.Add(new PlayerHandResult(player.Player, HandBuilder.BuildHand(player.Cards.ToList().Concat(CommunityCards))));
-                player.Fold();
-            }
+            var playerResults = remainingPlayers.Select(x => 
+                new PlayerHandResult(x.Player, 
+                    HandBuilder.BuildHand(x.Cards.ToList().Concat(CommunityCards))))
+                .ToList();
 
             playerResults = playerResults.OrderByDescending(x => x.Hand).ToList();
             foreach (var result in playerResults)
             {
                 result.Winnings = CurrentPot.PayoutPlayer(result.Player.Id);
+            }
+
+            //Update player status at the end of the hand
+            foreach (var player in remainingPlayers)
+            {
+                player.Fold();
+                player.IsAllIn = false;
             }
 
             return new HandResult(playerResults);
@@ -163,7 +168,15 @@ namespace PokerSim.Engine.Game
         private bool DoBettingRound()
         {
             bool everyoneBet = false;
-            int remainingPlayers = _players.Count(x => !x.IsEliminated && !x.HasFolded);
+            int remainingPlayers = _players.Count(x => !x.HasFolded);
+            if (remainingPlayers == 1)
+                return false;
+
+            //If everyone remaining in the hand is all in, no reason to do any betting.
+            int allInPlayers = _players.Count(x => x.IsAllIn);
+            if (remainingPlayers - allInPlayers <= 1)
+                return true;
+
             int turnCount = 0;
             while (!everyoneBet || turnCount < remainingPlayers)
             {
@@ -198,6 +211,7 @@ namespace PokerSim.Engine.Game
                 else
                 {
                     _lastBettingPlayerIndex = _currentPlayerIndex;
+                    everyoneBet = false;
                     CurrentPot.PlayerRaise(player.Player.Id, result.RaiseAmount);
                 }
 
