@@ -6,6 +6,19 @@ using System.Threading.Tasks;
 
 namespace PokerSim.Engine.Decks
 {
+    public class HighCardHandBuilder : IHandBuilder<HighCardHand>
+    {
+        public HighCardHand BuildHand(IEnumerable<Card> cards)
+        {
+            return new HighCardHand(cards.OrderByDescending(x => x.Value).Take(5));
+        }
+
+        public bool ContainsHand(IEnumerable<Card> cards)
+        {
+            return cards.Distinct().Count() == cards.Count();
+        }
+    }
+
     public class HighCardHand : BaseHand
     {
         public HighCardHand(IEnumerable<Card> cards) 
@@ -18,11 +31,6 @@ namespace PokerSim.Engine.Decks
                 Score += scoreFactor * card.Value;
                 scoreFactor /= 10;
             }
-        }
-
-        public static HighCardHand GetHandFromCards(IEnumerable<Card> cards)
-        {
-            return new HighCardHand(cards.OrderByDescending(x => x.Value).Take(5));
         }
 
         public override bool IsValid => IsHighCardHand(Cards) && Cards.Count() == 5;

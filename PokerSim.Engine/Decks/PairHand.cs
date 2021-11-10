@@ -1,11 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PokerSim.Engine.Decks
 {
+    public class PairHandBuilder : IHandBuilder<PairHand>
+    {
+        public PairHand BuildHand(IEnumerable<Card> cards)
+        {
+            var tempList = cards.ToList();
+            //Todo how to finger this one out!
+            var pairGroup = tempList.GroupBy(x => x.Value)
+                .Where(g => g.Count() == 2)
+                .OrderByDescending(x => x.Key)
+                .FirstOrDefault();
+            if (pairGroup == null)
+            {
+                //Invalid pair...
+                return new PairHand(new List<Card>(), new List<Card>());
+            }
+
+            var pair = cards.Where(x => x.Value == pairGroup.Key);
+            tempList.RemoveAll(x => x.Value == pairGroup.Key);
+
+            return new PairHand(pair, tempList.OrderByDescending(x => x.Value).Take(3));
+        }
+
+        public bool ContainsHand(IEnumerable<Card> cards)
+        {
+            return cards.GroupBy(x => x.Value).Where(g => g.Count() == 2).Count() == 1;
+        }
+    }
+
     public class PairHand : BaseHand
     {
         public PairHand(IEnumerable<Card> pair, IEnumerable<Card> cards)
@@ -26,31 +51,11 @@ namespace PokerSim.Engine.Decks
             }
         }
 
-        public static PairHand GetHandFromCards(IEnumerable<Card> cards)
-        {
-            var tempList = cards.ToList();
-            //Todo how to finger this one out!
-            var pairGroup = tempList.GroupBy(x => x.Value)
-                .Where(g => g.Count() == 2)
-                .OrderByDescending(x => x.Key)
-                .FirstOrDefault();
-            if(pairGroup == null)
-            {
-                //Invalid pair...
-                return new PairHand(new List<Card>(), new List<Card>());
-            }
-
-            var pair = cards.Where(x => x.Value == pairGroup.Key);
-            tempList.RemoveAll(x => x.Value == pairGroup.Key);
-            
-            return new PairHand(pair, tempList.OrderByDescending(x => x.Value).Take(3));
-        }
-
         public override bool IsValid => IsPairHand(Cards) && Cards.Count() == 5;
 
         public static bool IsPairHand(IEnumerable<Card> cards)
         {
-            return cards.GroupBy(x => x.Value).Where(g => g.Count() == 2).Count() >= 1;
+            return cards.GroupBy(x => x.Value).Where(g => g.Count() == 2).Count() == 1;
         }
     }
 }
