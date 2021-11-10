@@ -3,6 +3,32 @@ using System.Linq;
 
 namespace PokerSim.Engine.Decks
 {
+    public class ThreeOfAKindHandBuilder : IHandBuilder<ThreeOfAKindHand>
+    {
+        public ThreeOfAKindHand BuildHand(IEnumerable<Card> cards)
+        {
+            var tempList = cards.ToList();
+            //Todo how to finger this one out!
+            var tripleGroup = tempList.GroupBy(x => x.Value)
+                .Where(g => g.Count() == 3)
+                .OrderByDescending(x => x.Key).FirstOrDefault();
+            if (tripleGroup == null)
+            {
+                //Invalid pair...
+                return new ThreeOfAKindHand(new List<Card>(), new List<Card>());
+            }
+
+            tempList.RemoveAll(x => x.Value == tripleGroup.Key);
+            return new ThreeOfAKindHand(cards.Where(x => x.Value == tripleGroup.Key),
+                tempList.OrderByDescending(x => x.Value));
+        }
+
+        public bool ContainsHand(IEnumerable<Card> cards)
+        {
+            return cards.GroupBy(x => x.Value).Where(g => g.Count() == 3).Count() >= 1;
+        }
+    }
+
     public class ThreeOfAKindHand : BaseHand
     {
         public ThreeOfAKindHand(IEnumerable<Card> triplet, IEnumerable<Card> cards)
@@ -23,27 +49,9 @@ namespace PokerSim.Engine.Decks
             }
         }
 
-        public static ThreeOfAKindHand GetHandFromCards(IEnumerable<Card> cards)
-        {
-            var tempList = cards.ToList();
-            //Todo how to finger this one out!
-            var tripleGroup = tempList.GroupBy(x => x.Value)
-                .Where(g => g.Count() == 3)
-                .OrderByDescending(x => x.Key).FirstOrDefault();
-            if(tripleGroup == null)
-            {
-                //Invalid pair...
-                return new ThreeOfAKindHand(new List<Card>(), new List<Card>());
-            }
-
-            tempList.RemoveAll(x => x.Value == tripleGroup.Key);
-            return new ThreeOfAKindHand(cards.Where(x => x.Value == tripleGroup.Key),
-                tempList.OrderByDescending(x => x.Value));
-        }
-
         public override bool IsValid => IsThreeOfAKindHand(Cards) && Cards.Count() == 5;
 
-        public static bool IsThreeOfAKindHand(IEnumerable<Card> cards)
+        private static bool IsThreeOfAKindHand(IEnumerable<Card> cards)
         {
             return cards.GroupBy(x => x.Value).Where(g => g.Count() == 3).Count() >= 1;
         }

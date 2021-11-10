@@ -53,7 +53,7 @@ namespace PokerSim.Engine.Decks
 
         public override bool IsValid => IsPairHand(Cards) && Cards.Count() == 5;
 
-        public static bool IsPairHand(IEnumerable<Card> cards)
+        private static bool IsPairHand(IEnumerable<Card> cards)
         {
             return cards.GroupBy(x => x.Value).Where(g => g.Count() == 2).Count() == 1;
         }

@@ -35,7 +35,7 @@ namespace PokerSim.Engine.Decks
 
         public override bool IsValid => IsHighCardHand(Cards) && Cards.Count() == 5;
 
-        public static bool IsHighCardHand(IEnumerable<Card> cards)
+        private static bool IsHighCardHand(IEnumerable<Card> cards)
         {
             return cards.Distinct().Count() == cards.Count();
         }
