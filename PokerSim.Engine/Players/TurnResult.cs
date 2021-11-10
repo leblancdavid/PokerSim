@@ -11,33 +11,33 @@ namespace PokerSim.Engine.Players
 
     public sealed class TurnResult
     {
-        public Guid PlayerId { get; private set; }
+        public IPlayer Player { get; private set; }
         public TurnDecisionType Decision { get; private set; }
         public int RaiseAmount { get; private set; }
-        public TurnResult(Guid playerId)
+        public TurnResult(IPlayer player)
         {
             Decision = TurnDecisionType.Fold;
             RaiseAmount = 0;
-            PlayerId = playerId;
+            Player = player;
         }
 
-        public static TurnResult Fold(Guid playerId)
+        public static TurnResult Fold(IPlayer player)
         {
-            return new TurnResult(playerId);
+            return new TurnResult(player);
         }
 
-        public static TurnResult CheckOrCall(Guid playerId)
+        public static TurnResult CheckOrCall(IPlayer player)
         {
-            return new TurnResult(playerId)
+            return new TurnResult(player)
             {
                 Decision = TurnDecisionType.CheckOrCall,
                 RaiseAmount = 0
             };
         }
 
-        public static TurnResult Raise(Guid playerId, int amount)
+        public static TurnResult Raise(IPlayer player, int amount)
         {
-            return new TurnResult(playerId)
+            return new TurnResult(player)
             {
                 Decision = TurnDecisionType.Raise,
                 RaiseAmount = amount

@@ -126,7 +126,6 @@ namespace PokerSim.Engine.Game
                 return new HandResult(new List<PlayerHandResult>()
                 {
                     new PlayerHandResult(
-                        player.Player.Id, 
                         player.Player, 
                         HandBuilder.BuildHand(player.Cards.Concat(CommunityCards)),
                         CurrentPot.PayoutPlayer(player))
@@ -136,13 +135,13 @@ namespace PokerSim.Engine.Game
             var playerResults = new List<PlayerHandResult>();
             foreach(var player in remainingPlayers)
             {
-                playerResults.Add(new PlayerHandResult(player.Player.Id, player.Player, HandBuilder.BuildHand(player.Cards.Concat(CommunityCards))));
+                playerResults.Add(new PlayerHandResult(player.Player, HandBuilder.BuildHand(player.Cards.Concat(CommunityCards))));
             }
 
             playerResults = playerResults.OrderByDescending(x => x.Hand).ToList();
             foreach (var result in playerResults)
             {
-                result.Winnings = CurrentPot.PayoutPlayer(_players.FirstOrDefault(x => x.Player.Id == result.PlayerId));
+                result.Winnings = CurrentPot.PayoutPlayer(_players.FirstOrDefault(x => x.Player.Id == result.Player.Id));
             }
 
             return new HandResult(playerResults);

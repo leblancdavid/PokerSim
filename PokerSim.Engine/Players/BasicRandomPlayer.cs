@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using PokerSim.Engine.Decks;
 using PokerSim.Engine.Game;
 
 namespace PokerSim.Engine.Players
@@ -32,17 +30,17 @@ namespace PokerSim.Engine.Players
             {
                 if (state.CurrentBet == 0)
                 {
-                    return TurnResult.CheckOrCall(Id);
+                    return TurnResult.CheckOrCall(this);
                 }
-                return TurnResult.Fold(Id);
+                return TurnResult.Fold(this);
             }
 
             if(p < _foldProb + _checkCallProb)
             {
-                return TurnResult.CheckOrCall(Id);
+                return TurnResult.CheckOrCall(this);
             }
 
-            return TurnResult.Raise(Id, state.Blinds * 3);
+            return TurnResult.Raise(this, state.Blinds * 3);
         }
     }
 }

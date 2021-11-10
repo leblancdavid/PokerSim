@@ -19,14 +19,12 @@ namespace PokerSim.Engine.Game
 
     public class PlayerHandResult
     {
-        public Guid PlayerId { get; private set; }
         public IPlayer Player { get; private set; }
         public IHand Hand { get; private set; }
         public int Winnings { get; set; }
 
-        public PlayerHandResult(Guid playerId, IPlayer player, IHand hand, int winnings = 0)
+        public PlayerHandResult(IPlayer player, IHand hand, int winnings = 0)
         {
-            PlayerId = playerId;
             Player = player;
             Hand = hand;
             Winnings = winnings;
