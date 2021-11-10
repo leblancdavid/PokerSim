@@ -10,6 +10,7 @@ namespace PokerSim.Engine.Game
         int ChipCount { get; }
         int Blinds { get; }
         int NumRemainingPlayersInHand { get; }
+        TexasHoldemStages CurrentStage { get; }
 
         IEnumerable<Card> CommunityCards { get; }
         IEnumerable<Card> PlayerCards { get; }

@@ -16,9 +16,10 @@ namespace PokerSim.Engine.Game
         public IEnumerable<Card> CommunityCards { get; private set; }
 
         public IEnumerable<Card> PlayerCards { get; private set; }
-
+        public TexasHoldemStages CurrentStage { get; private set; }
         public PlayerTurnState(IEnumerable<Card> communityCards, 
             IEnumerable<Card> playerCards,
+            TexasHoldemStages stage,
             int currentBet,
             int currentPot,
             int blinds,
@@ -27,6 +28,7 @@ namespace PokerSim.Engine.Game
         {
             CommunityCards = communityCards;
             PlayerCards = playerCards;
+            CurrentStage = stage;
             CurrentBet = currentBet;
             CurrentPot = currentPot;
             Blinds = blinds;

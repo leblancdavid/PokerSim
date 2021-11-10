@@ -1,6 +1,8 @@
-﻿using PokerSim.Engine.Game;
+﻿using PokerSim.Engine.Decks;
+using PokerSim.Engine.Game;
 using PokerSim.Engine.Players;
 using System;
+using System.Collections.Generic;
 
 namespace PokerSim.TestConsole
 {
@@ -36,6 +38,17 @@ namespace PokerSim.TestConsole
             {
                 Console.WriteLine(turnResult.ToString());
             }
+        }
+
+        public void Log(TexasHoldemStages stage, IEnumerable<Card> communityCards)
+        {
+            string str = stage.ToString() + ": ";
+            foreach(var card in communityCards)
+            {
+                str += card.ShortName + " ";
+            }
+
+            Console.WriteLine(str);
         }
     }
 }
