@@ -8,6 +8,7 @@ namespace PokerSim.Engine.Game
         int CurrentBet { get; }
         int CurrentPot { get; }
         int ChipCount { get; }
+        int Blinds { get; }
         int NumRemainingPlayersInHand { get; }
 
         IEnumerable<Card> CommunityCards { get; }

@@ -5,14 +5,14 @@ using System.Linq;
 
 namespace PokerSim.Engine.Game
 {
-    internal class TexasHoldemGameEngine : IGameEngine
+    public class TexasHoldemGameEngine : IGameEngine
     {
         public IHandBuilder HandBuilder { get; private set; }
         public Deck Deck { get; private set; }
-        public PotState CurrentPot { get; private set; }
+        internal PotState CurrentPot { get; private set; }
 
         private List<IPlayerState> _players = new List<IPlayerState>();
-        public IEnumerable<IPlayerState> Players => _players;
+        internal IEnumerable<IPlayerState> Players => _players;
 
         private List<Card> _communityCards = new List<Card>();
         public IEnumerable<Card> CommunityCards => _communityCards;
@@ -53,13 +53,19 @@ namespace PokerSim.Engine.Game
             bool winner = false;
             while (!winner)
             {
-
+                PlayHand();
+                if(_players.Where(x => !x.IsEliminated).Count() == 1)
+                {
+                    winner = true;
+                    return;
+                }    
             }
         }
 
         public void PlayHand()
         {
             CurrentPot = new PotState();
+            _communityCards.Clear();
             Deck = new Deck();
             Deck.Shuffle();
             UpdateBlinds();
@@ -138,17 +144,6 @@ namespace PokerSim.Engine.Game
             bool everyoneBet = false;
             while (!CurrentPot.AreAllBetsIn || !everyoneBet)
             {
-                _currentPlayerIndex++;
-                if (_currentPlayerIndex >= _players.Count)
-                {
-                    _currentPlayerIndex = 0;
-                }
-
-                if(_currentPlayerIndex == _startingPlayerIndex)
-                {
-                    everyoneBet = true;
-                }
-
                 var player = _players[_currentPlayerIndex];
                 if (player.IsEliminated || player.HasFolded)
                     continue;
@@ -171,6 +166,17 @@ namespace PokerSim.Engine.Game
                 {
                     CurrentPot.PlayerRaise(player, result.RaiseAmount);
                 }
+
+                _currentPlayerIndex++;
+                if (_currentPlayerIndex >= _players.Count)
+                {
+                    _currentPlayerIndex = 0;
+                }
+
+                if (_currentPlayerIndex == _startingPlayerIndex)
+                {
+                    everyoneBet = true;
+                }
             }
 
             return true;
@@ -187,6 +193,7 @@ namespace PokerSim.Engine.Game
                 currentPlayer.Cards,
                 CurrentPot.ToCallAmount(currentPlayer),
                 CurrentPot.TotalPotSize,
+                BigBlindValue,
                 currentPlayer.ChipCount,
                 _players.Count(x => !x.IsEliminated && !x.HasFolded));
         }

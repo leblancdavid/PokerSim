@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace PokerSim.Engine.Game
 {
-    internal interface IGameEngine
+    public interface IGameEngine
     {
         IHandBuilder HandBuilder { get; }
         Deck Deck { get; }
-        IEnumerable<IPlayerState> Players { get; }
+        //IEnumerable<IPlayerState> Players { get; }
         IEnumerable<Card> CommunityCards { get; }
-        PotState CurrentPot { get; }
+        //PotState CurrentPot { get; }
         int SmallBlindIndex { get; }
         int SmallBlindValue { get; }
         int BigBlindIndex { get; }

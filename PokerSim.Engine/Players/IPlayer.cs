@@ -1,6 +1,4 @@
-﻿using PokerSim.Engine.Decks;
-using PokerSim.Engine.Game;
-using System;
+﻿using PokerSim.Engine.Game;
 
 namespace PokerSim.Engine.Players
 {

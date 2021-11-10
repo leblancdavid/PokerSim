@@ -9,6 +9,7 @@ namespace PokerSim.Engine.Game
 
         public int CurrentPot { get; private set; }
         public int ChipCount { get; private set; }
+        public int Blinds { get; private set; }
 
         public int NumRemainingPlayersInHand { get; private set; }
 
@@ -20,6 +21,7 @@ namespace PokerSim.Engine.Game
             IEnumerable<Card> playerCards,
             int currentBet,
             int currentPot,
+            int blinds,
             int chipCount,
             int numberPlayersLeft)
         {
@@ -27,6 +29,7 @@ namespace PokerSim.Engine.Game
             PlayerCards = playerCards;
             CurrentBet = currentBet;
             CurrentPot = currentPot;
+            Blinds = blinds;
             ChipCount = chipCount;
             NumRemainingPlayersInHand = numberPlayersLeft;
         }
