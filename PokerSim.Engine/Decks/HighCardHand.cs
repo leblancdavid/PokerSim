@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PokerSim.Engine.Decks
 {
-    public class HighCardHandBuilder : IHandBuilder<HighCardHand>
+    public class HighCardHandBuilder : IHandBuilder
     {
-        public HighCardHand BuildHand(IEnumerable<Card> cards)
+        public IHand BuildHand(IEnumerable<Card> cards)
         {
             return new HighCardHand(cards.OrderByDescending(x => x.Value).Take(5));
         }

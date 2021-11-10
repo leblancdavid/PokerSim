@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace PokerSim.Engine.Decks
 {
-    public class StraightHandBuilder : IHandBuilder<StraightHand>
+    public class StraightHandBuilder : IHandBuilder
     {
-        public StraightHand BuildHand(IEnumerable<Card> cards)
+        public IHand BuildHand(IEnumerable<Card> cards)
         {
             var straight = new List<Card>();
             var distinct = cards.Select(x => x.Value).Distinct().OrderBy(x => x).ToList();

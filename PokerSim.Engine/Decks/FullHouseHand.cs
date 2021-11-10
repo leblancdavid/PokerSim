@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace PokerSim.Engine.Decks
 {
-    public class FullHouseHandBuilder : IHandBuilder<FullHouseHand>
+    public class FullHouseHandBuilder : IHandBuilder
     {
-        public FullHouseHand BuildHand(IEnumerable<Card> cards)
+        public IHand BuildHand(IEnumerable<Card> cards)
         {
             var tempList = cards.ToList();
             var tripletGroup = cards.GroupBy(x => x.Value)

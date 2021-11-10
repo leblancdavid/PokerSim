@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace PokerSim.Engine.Decks
 {
-    public class StraightFlushHandBuilder : IHandBuilder<StraightFlushHand>
+    public class StraightFlushHandBuilder : IHandBuilder
     {
-        public StraightFlushHand BuildHand(IEnumerable<Card> cards)
+        public IHand BuildHand(IEnumerable<Card> cards)
         {
             var suitGroup = cards.GroupBy(x => x.Suit).FirstOrDefault(x => x.Count() >= 5);
             if(suitGroup == null)

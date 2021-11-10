@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace PokerSim.Engine.Decks
 {
-    public class ThreeOfAKindHandBuilder : IHandBuilder<ThreeOfAKindHand>
+    public class ThreeOfAKindHandBuilder : IHandBuilder
     {
-        public ThreeOfAKindHand BuildHand(IEnumerable<Card> cards)
+        public IHand BuildHand(IEnumerable<Card> cards)
         {
             var tempList = cards.ToList();
             //Todo how to finger this one out!
