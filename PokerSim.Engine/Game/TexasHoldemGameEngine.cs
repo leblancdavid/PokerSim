@@ -144,9 +144,18 @@ namespace PokerSim.Engine.Game
             bool everyoneBet = false;
             while (!CurrentPot.AreAllBetsIn || !everyoneBet)
             {
+                
+
                 var player = _players[_currentPlayerIndex];
                 if (player.IsEliminated || player.HasFolded)
+                {
+                    NextPlayer();
+                    if (_currentPlayerIndex == _startingPlayerIndex)
+                    {
+                        everyoneBet = true;
+                    }
                     continue;
+                }
 
                 var state = GetCurrentPlayerTurnState(player);
                 var result = player.Player.TakeTurn(state);
@@ -167,12 +176,7 @@ namespace PokerSim.Engine.Game
                     CurrentPot.PlayerRaise(player, result.RaiseAmount);
                 }
 
-                _currentPlayerIndex++;
-                if (_currentPlayerIndex >= _players.Count)
-                {
-                    _currentPlayerIndex = 0;
-                }
-
+                NextPlayer(); 
                 if (_currentPlayerIndex == _startingPlayerIndex)
                 {
                     everyoneBet = true;
@@ -180,6 +184,15 @@ namespace PokerSim.Engine.Game
             }
 
             return true;
+        }
+
+        private void NextPlayer()
+        {
+            _currentPlayerIndex++;
+            if (_currentPlayerIndex >= _players.Count)
+            {
+                _currentPlayerIndex = 0;
+            }
         }
 
         private bool AllPlayersFolded()
