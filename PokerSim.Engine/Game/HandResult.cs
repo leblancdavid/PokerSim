@@ -10,6 +10,7 @@ namespace PokerSim.Engine.Game
     {
         public IEnumerable<PlayerHandResult> PlayerResults { get; private set; }
         public IEnumerable<PlayerHandResult> Winners => PlayerResults.Where(x => x.Winnings > 0);
+        public IEnumerable<PlayerHandResult> Losers => PlayerResults.Where(x => x.Winnings == 0);
 
         public HandResult(IEnumerable<PlayerHandResult> playerResults)
         {

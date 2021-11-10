@@ -43,5 +43,19 @@ namespace PokerSim.Engine.Players
                 RaiseAmount = amount
             };
         }
+
+        public override string ToString()
+        {
+            switch (Decision)
+            {
+                case TurnDecisionType.Fold:
+                    return $"{Player.Name} Folds";
+                case TurnDecisionType.CheckOrCall:
+                    return $"{Player.Name} Checks/Calls";
+                case TurnDecisionType.Raise:
+                    return $"{Player.Name} Raises ${RaiseAmount}";
+            }
+            return $"{Player.Name}";
+        }
     }
 }

@@ -28,5 +28,15 @@ namespace PokerSim.Engine.Decks
 
             return -1;
         }
+
+        public override string ToString()
+        {
+            string output = "";
+            foreach(var card in Cards)
+            {
+                output += card.ShortName;
+            }
+            return output;
+        }
     }
 }

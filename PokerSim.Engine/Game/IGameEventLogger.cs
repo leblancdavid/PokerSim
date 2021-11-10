@@ -2,7 +2,7 @@
 
 namespace PokerSim.Engine.Game
 {
-    public interface IGameEventLog
+    public interface IGameEventLogger
     {
         void Log(HandResult handResult);
         void Log(TurnResult turnResult);

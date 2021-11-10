@@ -50,13 +50,13 @@
             switch (suit)
             {
                 case CardSuit.Heart:
-                    return "♡";
+                    return "\u2665";
                 case CardSuit.Spade:
-                    return "♠";
+                    return "\u2660";
                 case CardSuit.Club:
-                    return "♣";
+                    return "\u2663";
                 case CardSuit.Diamond:
-                    return "♢";
+                    return "\u2666";
                 default:
                     return "";
             }

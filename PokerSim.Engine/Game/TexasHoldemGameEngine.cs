@@ -31,8 +31,12 @@ namespace PokerSim.Engine.Game
         private int _currentPlayerIndex = 1;
 
         private int _initialChips = 1000;
-        public TexasHoldemGameEngine()
+
+        private IGameEventLogger _logger;
+        public TexasHoldemGameEngine(IGameEventLogger logger)
         {
+            _logger = logger;
+
             SmallBlindIndex = -1;
             SmallBlindValue = 1;
             BigBlindIndex = 0;
@@ -114,7 +118,7 @@ namespace PokerSim.Engine.Game
             //River bets
             _communityCards.Add(Deck.Draw());
             DoBettingRound();
-            ResolveHand();
+            _logger.Log(ResolveHand());
         }
 
         private HandResult ResolveHand()
@@ -167,7 +171,10 @@ namespace PokerSim.Engine.Game
 
                 var state = GetCurrentPlayerTurnState(player);
                 var result = player.Player.TakeTurn(state);
-                if(result.Decision == TurnDecisionType.Fold)
+                
+                _logger.Log(result);
+
+                if (result.Decision == TurnDecisionType.Fold)
                 {
                     player.Fold();
                     CurrentPot.PlayerFold(player);
