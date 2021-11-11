@@ -58,7 +58,8 @@ namespace PokerSim.Engine.Game
             bool winner = false;
             while (!winner)
             {
-                PlayHand();
+                var handResult = PlayHand();
+                _logger.Log(handResult);
                 if(_players.Where(x => !x.IsEliminated).Count() == 1)
                 {
                     winner = true;
@@ -75,7 +76,7 @@ namespace PokerSim.Engine.Game
             }
 
         }
-        public void PlayHand()
+        public HandResult PlayHand()
         {
 
             CurrentPot = new PotState(_players);
@@ -83,9 +84,6 @@ namespace PokerSim.Engine.Game
             Deck = new Deck();
             Deck.Shuffle();
             UpdateBlinds();
-
-            if (SmallBlindIndex == BigBlindIndex)
-                return;
 
             //Each player gets 2 cards
             for (int i = 0; i < 2; ++i)
@@ -107,8 +105,7 @@ namespace PokerSim.Engine.Game
             //Pre-flop betting
             if (!DoBettingRound())
             {
-                _logger.Log(ResolveHand());
-                return;
+                return ResolveHand();
             }    
 
             //Flop bets
@@ -121,8 +118,7 @@ namespace PokerSim.Engine.Game
             _logger.Log(_currentStage, CommunityCards);
             if (!DoBettingRound())
             {
-                _logger.Log(ResolveHand());
-                return;
+                return ResolveHand();
             }
 
             //Turn bets
@@ -131,8 +127,7 @@ namespace PokerSim.Engine.Game
             _logger.Log(_currentStage, CommunityCards);
             if (!DoBettingRound())
             {
-                _logger.Log(ResolveHand());
-                return;
+                return ResolveHand();
             }
 
             //River bets
@@ -140,7 +135,8 @@ namespace PokerSim.Engine.Game
             _currentStage = TexasHoldemStages.River;
             _logger.Log(_currentStage, CommunityCards);
             DoBettingRound();
-            _logger.Log(ResolveHand());
+
+            return ResolveHand();
         }
 
         private HandResult ResolveHand()

@@ -19,7 +19,7 @@ namespace PokerSim.Engine.Game
 
         void AddPlayer(IPlayer player);
 
-        void PlayHand();
+        HandResult PlayHand();
 
         void Play();
     }
