@@ -8,7 +8,7 @@ namespace PokerSim.Runner
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var players = PlayerPluginLoader.LoadPluginPlayers(args[0]);
         }
 
         

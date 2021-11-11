@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace PokerSim.Runner
@@ -11,7 +12,7 @@ namespace PokerSim.Runner
         public static IEnumerable<IPlayer> LoadPluginPlayers(string pluginPath)
         {
             var players = new List<IPlayer>();
-            var plugins = Directory.GetDirectories(pluginPath);
+            var plugins = Directory.GetFiles(pluginPath).Where(x => Path.GetExtension(x) == ".dll");
             foreach(var p in plugins)
             {
                 var player = LoadPlayer(p);
@@ -26,34 +27,34 @@ namespace PokerSim.Runner
 
         public static IPlayer LoadPlayer(string path)
         {
-            var assembly = LoadPlugin(path);
-
-            foreach (Type type in assembly.GetTypes())
+            try
             {
-                if (typeof(PlayerPlugin).IsAssignableFrom(type))
-                {
-                    var result = Activator.CreateInstance(type) as IPlayer;
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
-            }
+                var assembly = LoadPlugin(path);
 
-            return null;
+                foreach (Type type in assembly.GetTypes())
+                {
+                    if (typeof(PlayerPlugin).IsAssignableFrom(type))
+                    {
+
+                        var result = Activator.CreateInstance(type) as IPlayer;
+                        if (result != null)
+                        {
+                            return result;
+                        }
+                    }
+
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
-        private static Assembly LoadPlugin(string relativePath)
+        private static Assembly LoadPlugin(string pluginLocation)
         {
-            // Navigate up to the solution root
-            string root = Path.GetFullPath(Path.Combine(
-                Path.GetDirectoryName(
-                    Path.GetDirectoryName(
-                        Path.GetDirectoryName(
-                            Path.GetDirectoryName(
-                                Path.GetDirectoryName(typeof(Program).Assembly.Location)))))));
-
-            string pluginLocation = Path.GetFullPath(Path.Combine(root, relativePath.Replace('\\', Path.DirectorySeparatorChar)));
             Console.WriteLine($"Loading commands from: {pluginLocation}");
             PlayerPluginLoadContext loadContext = new PlayerPluginLoadContext(pluginLocation);
             return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
