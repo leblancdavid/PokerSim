@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PokerSim.Bots\PokerSim.Bots.csproj" />
     <ProjectReference Include="..\PokerSim.Engine\PokerSim.Engine.csproj" />
   </ItemGroup>
 

@@ -4,6 +4,20 @@ using System;
 
 namespace PokerSim.Bots
 {
+    public class SimpleRandomPlayerFactory : IBotFactory
+    {
+        public IPlayer GetRandomPlayer()
+        {
+            var random = new Random();
+
+            double checkProb = random.NextDouble() * 0.3 + 0.1;
+            double raiseProb = random.NextDouble() * 0.3 + 0.1;
+
+            return new SimpleRandomPlayer(BotNameGenerator.GenerateName(random.Next(3, 10)),
+                checkProb, raiseProb);
+        }
+    }
+
     public class SimpleRandomPlayer : IPlayer
     {
         private double _checkCallProb;
