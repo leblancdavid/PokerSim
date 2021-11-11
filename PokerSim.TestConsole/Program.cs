@@ -1,6 +1,5 @@
 ﻿using PokerSim.Bots;
 using PokerSim.Engine.Game;
-using System;
 
 namespace PokerSim.TestConsole
 {
@@ -8,6 +7,7 @@ namespace PokerSim.TestConsole
     {
         static void Main(string[] args)
         {
+            var pluginPlayer = new SamplePlayerPlugin.SamplePlayerPlugin();
             var engine = new TexasHoldemGameEngine(new ConsoleGameEventLogger(true));
             engine.AddPlayer(new SimpleRandomPlayer("Bob", 0.25, 0.25));
             engine.AddPlayer(new SimpleRandomPlayer("Joe", 0.25, 0.25));

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="player-configuration.json" />
+    <Content Remove="player-configuration.json" />
   </ItemGroup>
 
   <ItemGroup>
