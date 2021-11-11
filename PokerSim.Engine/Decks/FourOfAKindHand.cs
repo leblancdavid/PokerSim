@@ -31,7 +31,7 @@ namespace PokerSim.Engine.Decks
     public class FourOfAKindHand : BaseHand
     {
         public FourOfAKindHand(IEnumerable<Card> quad, Card kicker)
-            : base(HandType.FourOfAKind, quad.Concat(new List<Card>() { kicker }))
+            : base(HandType.FourOfAKind, quad.ToList().Concat(new List<Card>() { kicker }))
         {
             Score = 0;
             long scoreFactor = 100000;

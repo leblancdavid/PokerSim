@@ -32,7 +32,7 @@ namespace PokerSim.Engine.Decks
     public class ThreeOfAKindHand : BaseHand
     {
         public ThreeOfAKindHand(IEnumerable<Card> triplet, IEnumerable<Card> cards)
-            : base(HandType.ThreeOfAKind, triplet.Concat(cards))
+            : base(HandType.ThreeOfAKind, triplet.ToList().Concat(cards.ToList()))
         {
             Score = 0;
             long scoreFactor = 100000;

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,7 +8,10 @@
   <ItemGroup>
     <ProjectReference Include="..\PokerSim.Bots\PokerSim.Bots.csproj" />
     <ProjectReference Include="..\PokerSim.Engine\PokerSim.Engine.csproj" />
-    <ProjectReference Include="..\PokerSim.SamplePlayerPlugin\PokerSim.SamplePlayerPlugin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PlayerPlugins\" />
   </ItemGroup>
 
 </Project>

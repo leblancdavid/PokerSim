@@ -139,7 +139,7 @@ namespace PokerSim.Engine.Game
                 {
                     new PlayerHandResult(
                         player.Player, 
-                        HandBuilder.BuildHand(player.Cards.Concat(CommunityCards)),
+                        HandBuilder.BuildHand(player.Cards.ToList().Concat(CommunityCards)),
                         CurrentPot.PayoutPlayer(player.Player.Id))
                 });
             }
@@ -252,24 +252,38 @@ namespace PokerSim.Engine.Game
 
         private void UpdateBlinds()
         {
-            SmallBlindIndex++;
-            if (SmallBlindIndex >= _players.Count)
+            do
             {
-                SmallBlindIndex = 0;
+                SmallBlindIndex++;
+                if (SmallBlindIndex >= _players.Count)
+                {
+                    SmallBlindIndex = 0;
+                }
             }
-            BigBlindIndex = SmallBlindIndex + 1;
-            if (BigBlindIndex >= _players.Count)
+            while (_players[SmallBlindIndex].IsEliminated);
+            
+            BigBlindIndex = SmallBlindIndex;
+            do
             {
-                BigBlindIndex = 0;
+                BigBlindIndex++;
+                if (BigBlindIndex >= _players.Count)
+                {
+                    BigBlindIndex = 0;
+                }
             }
+            while (_players[BigBlindIndex].IsEliminated);
 
             _lastBettingPlayerIndex = BigBlindIndex;
 
-            _currentPlayerIndex = _lastBettingPlayerIndex + 1;
-            if (_currentPlayerIndex >= _players.Count)
+            do
             {
-                _currentPlayerIndex = 0;
+                _currentPlayerIndex++;
+                if (_currentPlayerIndex >= _players.Count)
+                {
+                    _currentPlayerIndex = 0;
+                }
             }
+            while (_players[_currentPlayerIndex].IsEliminated);
         }
     }
 }
