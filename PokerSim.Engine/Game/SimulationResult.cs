@@ -22,6 +22,7 @@ namespace PokerSim.Engine.Game
     {
         private List<PlayerScore> _leaderboard = new List<PlayerScore>();
         public IEnumerable<PlayerScore> Leaderboard => _leaderboard;
+        public IPlayer Leader => _leaderboard.FirstOrDefault()?.Player;
         public void NotifyGameCompleted(GameResult gameResult)
         {
             int numPlayers = gameResult.Ranking.Count();
@@ -35,8 +36,23 @@ namespace PokerSim.Engine.Game
                     _leaderboard.Add(leader);
                 }
 
-                leader.Score += (long)Math.Floor((1.0 - Math.Pow((double)index / numPlayers, 2.0)) * 100.0);
+                var score = (long)Math.Floor((1.0 - Math.Pow((double)index / numPlayers, 2.0)) * 100.0);
+                leader.Score += score;
+                index++;
             }
+
+            _leaderboard = _leaderboard.OrderByDescending(x => x.Score).ToList();
         }
+
+        public override string ToString()
+        {
+            string board = "";
+            foreach(var player in _leaderboard)
+            {
+                board += $"{player.Player.Name}: {player.Score}\n";
+            }
+            return board;
+        }
+
     }
 }

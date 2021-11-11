@@ -21,6 +21,6 @@ namespace PokerSim.Engine.Game
 
         HandResult PlayHand();
 
-        void Play();
+        GameResult Play();
     }
 }

@@ -30,15 +30,20 @@ namespace PokerSim.Runner
             */
 
             engine.AddPlayer(new DeterministicPlayerV1("Bot1"));
-            engine.AddPlayer(new DeterministicPlayerV1("Bot2"));
+            engine.AddPlayer(new DeterministicPlayerV1("Bot2", 0.9, 0.3, 0.25, 0.1));
             engine.AddPlayer(new SimpleRandomPlayer("Bot3"));
-            engine.AddPlayer(new SimpleRandomPlayer("Bot4"));
+            //engine.AddPlayer(new SimpleRandomPlayer("Bot4"));
 
-            for (int i = 0; i < 10; ++i)
+            var simulationResults = new SimulationResult();
+            for (int i = 0; i < 1000; ++i)
             {
                 Console.WriteLine("***** NEW GAME STARTED *****");
-                engine.Play();
+                simulationResults.NotifyGameCompleted(engine.Play());
                 Console.WriteLine("***** GAME ENDED *****");
+
+                Console.WriteLine("***** LEADERBOARD *****");
+                Console.WriteLine(simulationResults.ToString());
+                Console.WriteLine("***** LEADERBOARD *****");
             }
 
         }

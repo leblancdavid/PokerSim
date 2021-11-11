@@ -52,20 +52,31 @@ namespace PokerSim.Engine.Game
             _players.Add(new PlayerState(player, _initialChips));
         }
 
-        public void Play()
+        public GameResult Play()
         {
+            var gameResult = new GameResult();
             Reset();
             bool winner = false;
             while (!winner)
             {
                 var handResult = PlayHand();
                 _logger.Log(handResult);
-                if(_players.Where(x => !x.IsEliminated).Count() == 1)
+                
+                var eliminatedPlayers = _players.Where(x => x.IsEliminated);
+                foreach(var player in eliminatedPlayers)
+                {
+                    gameResult.NotifyPlayerEliminated(player.Player);
+                }
+
+                var remainingPlayers = _players.Where(x => !x.IsEliminated);
+                if (remainingPlayers.Count() == 1)
                 {
                     winner = true;
-                    return;
+                    gameResult.NotifyWinner(remainingPlayers.First().Player);
+                    return gameResult;
                 }    
             }
+            return gameResult;
         }
 
         private void Reset()
