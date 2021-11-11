@@ -40,23 +40,26 @@ namespace PokerSim.Engine.Decks
         public TwoPairHand(IEnumerable<Card> highPair, IEnumerable<Card> lowPair, Card card)
             : base(HandType.TwoPair, highPair.ToList().Concat(lowPair.ToList()).Concat(new List<Card>() { card }))
         {
-            Score = 0;
+            RawScore = 0;
+            //Max possible score would be: A,A,K,K,Q
+            MaxPossibleScore = 14 * 100000 * 2 + 13 * 10000 * 2 + 12 * 1000;
+
             long scoreFactor = 100000;
             foreach(var pairCard in highPair)
             {
-                Score += scoreFactor * pairCard.Value;
+                RawScore += scoreFactor * pairCard.Value;
             }
             scoreFactor /= 10;
 
             foreach (var pairCard in lowPair)
             {
-                Score += scoreFactor * pairCard.Value;
+                RawScore += scoreFactor * pairCard.Value;
             }
             scoreFactor /= 10;
 
             if(card != null)
             {
-                Score += scoreFactor * card.Value;
+                RawScore += scoreFactor * card.Value;
             }
         }
 

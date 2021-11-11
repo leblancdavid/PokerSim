@@ -18,7 +18,9 @@ namespace PokerSim.Engine.Decks
     }
     public interface IHand : IComparable<IHand>
     {
-        long Score { get; }
+        long RawScore { get; }
+        long MaxPossibleScore { get; }
+        double NormalizedScore { get; }
         HandType HandType { get; }
         IEnumerable<Card> Cards { get; }
         bool IsValid { get; }
