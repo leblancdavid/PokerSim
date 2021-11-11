@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0F4218CF-E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D9F64D05-AB75-4148-9E51-BFD983B071A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerSim.Runner", "PokerSim.Runner\PokerSim.Runner.csproj", "{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,18 @@ Global
 		{F6BC2F3D-41CC-4838-9C73-40D53D8F5F5E}.Release|x64.Build.0 = Release|Any CPU
 		{F6BC2F3D-41CC-4838-9C73-40D53D8F5F5E}.Release|x86.ActiveCfg = Release|Any CPU
 		{F6BC2F3D-41CC-4838-9C73-40D53D8F5F5E}.Release|x86.Build.0 = Release|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Debug|x64.Build.0 = Debug|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Debug|x86.Build.0 = Debug|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Release|x64.ActiveCfg = Release|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Release|x64.Build.0 = Release|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Release|x86.ActiveCfg = Release|Any CPU
+		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
