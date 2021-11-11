@@ -5,15 +5,20 @@ namespace PokerSim.Engine.Decks
 {
     public class BaseHand : IHand
     {
-        public long Score { get; protected set; }
+        public long RawScore { get; protected set; }
+        public long MaxPossibleScore { get; protected set; }
         public HandType HandType { get; protected set; }
         public IEnumerable<Card> Cards { get; protected set; }
 
         public virtual bool IsValid => true;
 
+        public double NormalizedScore => (double)RawScore / (double)MaxPossibleScore;
+        public double RelativeScore => (double)NormalizedScore * (double)HandType / 10.0; //there are 10 possible hands
+
         public BaseHand(HandType handType, IEnumerable<Card> cards)
         {
-            Score = 0;
+            RawScore = 0;
+            MaxPossibleScore = 1;
             Cards = cards;
             HandType = handType;
         }
@@ -28,10 +33,10 @@ namespace PokerSim.Engine.Decks
                 return (int)HandType > (int)other.HandType ? 1 : -1;
             }
 
-            if (Score > other.Score)
+            if (RawScore > other.RawScore)
                 return 1;
 
-            if (Score == other.Score)
+            if (RawScore == other.RawScore)
                 return 0;
 
             return -1;

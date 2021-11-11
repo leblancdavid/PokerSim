@@ -34,17 +34,19 @@ namespace PokerSim.Engine.Decks
         public ThreeOfAKindHand(IEnumerable<Card> triplet, IEnumerable<Card> cards)
             : base(HandType.ThreeOfAKind, triplet.ToList().Concat(cards.ToList()))
         {
-            Score = 0;
-            long scoreFactor = 100000;
+            RawScore = 0;
+            //Max possible score would be: A,A,A,K,Q
+            MaxPossibleScore = 14 * 1000 * 3 + 13 * 100 + 12 * 10;
+            long scoreFactor = 1000;
             foreach(var card in triplet)
             {
-                Score += scoreFactor * card.Value;
+                RawScore += scoreFactor * card.Value;
             }
             scoreFactor /= 10;
 
             foreach (var card in cards)
             {
-                Score += scoreFactor * card.Value;
+                RawScore += scoreFactor * card.Value;
                 scoreFactor /= 10;
             }
         }

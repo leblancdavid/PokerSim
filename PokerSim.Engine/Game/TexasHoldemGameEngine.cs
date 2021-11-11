@@ -30,7 +30,7 @@ namespace PokerSim.Engine.Game
         private int _lastBettingPlayerIndex = 1;
         private int _currentPlayerIndex = 1;
 
-        private int _initialChips = 100;
+        private int _initialChips = 3;
         private TexasHoldemStages _currentStage;
         private IGameEventLogger _logger;
         public TexasHoldemGameEngine(IGameEventLogger logger)
@@ -54,6 +54,7 @@ namespace PokerSim.Engine.Game
 
         public void Play()
         {
+            Reset();
             bool winner = false;
             while (!winner)
             {
@@ -66,28 +67,41 @@ namespace PokerSim.Engine.Game
             }
         }
 
+        private void Reset()
+        {
+            foreach (var player in _players)
+            {
+                player.ChipCount = _initialChips;
+            }
+
+        }
         public void PlayHand()
         {
+
             CurrentPot = new PotState(_players);
             _communityCards.Clear();
             Deck = new Deck();
             Deck.Shuffle();
             UpdateBlinds();
 
-            CurrentPot.AddToPot(_players[SmallBlindIndex].Player.Id, SmallBlindValue);
-            CurrentPot.AddToPot(_players[BigBlindIndex].Player.Id, BigBlindValue);
+            if (SmallBlindIndex == BigBlindIndex)
+                return;
 
             //Each player gets 2 cards
             for (int i = 0; i < 2; ++i)
             {
                 foreach (var player in _players)
                 {
-                    if(!player.IsEliminated)
+                    if (!player.IsEliminated)
                     {
                         player.Deal(Deck.Draw());
                     }
                 }
             }
+
+            CurrentPot.AddToPot(_players[SmallBlindIndex].Player.Id, SmallBlindValue);
+            CurrentPot.AddToPot(_players[BigBlindIndex].Player.Id, BigBlindValue);
+
             _currentStage = TexasHoldemStages.PreFlop;
             _logger.Log(_currentStage, CommunityCards);
             //Pre-flop betting
@@ -135,13 +149,17 @@ namespace PokerSim.Engine.Game
             if(remainingPlayers.Count() == 1)
             {
                 var player = remainingPlayers.FirstOrDefault();
-                return new HandResult(new List<PlayerHandResult>()
+                var handResult = new HandResult(new List<PlayerHandResult>()
                 {
                     new PlayerHandResult(
-                        player.Player, 
+                        player.Player,
                         HandBuilder.BuildHand(player.Cards.ToList().Concat(CommunityCards)),
                         CurrentPot.PayoutPlayer(player.Player.Id))
                 });
+
+                player.Fold();
+                player.IsAllIn = false;
+                return handResult;
             }
 
             var playerResults = remainingPlayers.Select(x => 

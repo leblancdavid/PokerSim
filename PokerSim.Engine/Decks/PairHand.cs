@@ -36,17 +36,19 @@ namespace PokerSim.Engine.Decks
         public PairHand(IEnumerable<Card> pair, IEnumerable<Card> cards)
             : base(HandType.Pair, pair.Concat(cards))
         {
-            Score = 0;
+            RawScore = 0;
+            //Max possible score would be: A,A,K,Q,J
+            MaxPossibleScore = 14 * 100000 * 2 + 13 * 10000 + 12 * 1000 + 11 * 100;
             long scoreFactor = 100000;
             foreach(var pairCard in pair)
             {
-                Score += scoreFactor * pairCard.Value;
+                RawScore += scoreFactor * pairCard.Value;
             }
             scoreFactor /= 10;
 
             foreach (var card in cards)
             {
-                Score += scoreFactor * card.Value;
+                RawScore += scoreFactor * card.Value;
                 scoreFactor /= 10;
             }
         }

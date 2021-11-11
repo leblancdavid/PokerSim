@@ -24,11 +24,13 @@ namespace PokerSim.Engine.Decks
         public HighCardHand(IEnumerable<Card> cards) 
             : base(HandType.HighCard, cards)
         {
-            Score = 0;
+            RawScore = 0;
+            //Max possible score would be: A,K,Q,J,9
+            MaxPossibleScore = 14 * 100000 + 13 * 10000 + 12 * 1000 + 11 * 100 + 9 * 10;
             long scoreFactor = 100000;
             foreach(var card in Cards)
             {
-                Score += scoreFactor * card.Value;
+                RawScore += scoreFactor * card.Value;
                 scoreFactor /= 10;
             }
         }

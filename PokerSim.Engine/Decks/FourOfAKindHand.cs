@@ -33,15 +33,18 @@ namespace PokerSim.Engine.Decks
         public FourOfAKindHand(IEnumerable<Card> quad, Card kicker)
             : base(HandType.FourOfAKind, quad.ToList().Concat(new List<Card>() { kicker }))
         {
-            Score = 0;
-            long scoreFactor = 100000;
+            RawScore = 0;
+            //Max possible score would be: A,A,A,A,K
+            MaxPossibleScore = 14 * 100 * 4 + 13 * 10;
+
+            long scoreFactor = 100;
             foreach(var card in quad)
             {
-                Score += scoreFactor * card.Value;
+                RawScore += scoreFactor * card.Value;
             }
             scoreFactor /= 10;
 
-            Score += scoreFactor * kicker.Value;
+            RawScore += scoreFactor * kicker.Value;
         }
 
         public override bool IsValid => IsFourOfAKindHand(Cards) && Cards.Count() == 5;

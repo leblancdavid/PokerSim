@@ -19,7 +19,7 @@ namespace PokerSim.Runner
                 engine.AddPlayer(player);
             }
 
-            int tableSize = 8;
+            int tableSize = 2;
             int numBotsToAdd = tableSize - (pluginPlayers.Count() % tableSize);
             var botFactory = new BotFactory();
             for(int i = 0; i < numBotsToAdd; ++i)
@@ -27,7 +27,13 @@ namespace PokerSim.Runner
                 engine.AddPlayer(botFactory.GetRandomPlayer());
             }
 
-            engine.Play();
+            for(int i = 0; i < 10; ++i)
+            {
+                Console.WriteLine("***** NEW GAME STARTED *****");
+                engine.Play();
+                Console.WriteLine("***** GAME ENDED *****");
+            }
+
         }
 
         

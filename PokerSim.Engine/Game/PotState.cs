@@ -112,7 +112,7 @@ namespace PokerSim.Engine.Game
 
         public void PayoutPlayers(IEnumerable<PlayerHandResult> results)
         {
-            var groupedResults = results.OrderByDescending(x => x.Hand).GroupBy(x => x.Hand.Score).ToList();
+            var groupedResults = results.OrderByDescending(x => x.Hand).GroupBy(x => x.Hand.RawScore).ToList();
             foreach(var group in groupedResults)
             {
                 foreach (var result in group)
