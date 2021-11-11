@@ -30,9 +30,9 @@ namespace PokerSim.Runner
 
             foreach (Type type in assembly.GetTypes())
             {
-                if (typeof(IPlayer).IsAssignableFrom(type))
+                if (typeof(PlayerPlugin).IsAssignableFrom(type))
                 {
-                    IPlayer result = Activator.CreateInstance(type) as IPlayer;
+                    var result = Activator.CreateInstance(type) as IPlayer;
                     if (result != null)
                     {
                         return result;

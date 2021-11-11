@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D9F6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerSim.Runner", "PokerSim.Runner\PokerSim.Runner.csproj", "{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerSim.SamplePlayerPlugin", "PokerSim.SamplePlayerPlugin\PokerSim.SamplePlayerPlugin.csproj", "{CF7FC729-4C45-4130-9DB6-1224093FE50A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,18 @@ Global
 		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Release|x64.Build.0 = Release|Any CPU
 		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Release|x86.ActiveCfg = Release|Any CPU
 		{8F848CD0-C6AC-4DD3-B457-23AA060B96AA}.Release|x86.Build.0 = Release|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Debug|x64.Build.0 = Debug|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Debug|x86.Build.0 = Debug|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Release|x64.ActiveCfg = Release|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Release|x64.Build.0 = Release|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Release|x86.ActiveCfg = Release|Any CPU
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +93,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B6E30B05-F35E-4934-B0BF-D477E9807867} = {0F4218CF-E7EE-431E-8DCA-22E543D9080C}
 		{F6BC2F3D-41CC-4838-9C73-40D53D8F5F5E} = {D9F64D05-AB75-4148-9E51-BFD983B071A1}
+		{CF7FC729-4C45-4130-9DB6-1224093FE50A} = {D9F64D05-AB75-4148-9E51-BFD983B071A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44CEDB5A-C045-46E0-AC3D-B2D9ADA04073}

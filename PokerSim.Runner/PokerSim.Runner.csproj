@@ -9,4 +9,8 @@
     <ProjectReference Include="..\PokerSim.Engine\PokerSim.Engine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PlayerPlugins\" />
+  </ItemGroup>
+
 </Project>
