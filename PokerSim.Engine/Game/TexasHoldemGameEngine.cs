@@ -139,7 +139,7 @@ namespace PokerSim.Engine.Game
                 {
                     new PlayerHandResult(
                         player.Player, 
-                        HandBuilder.BuildHand(player.Cards.Concat(CommunityCards)),
+                        HandBuilder.BuildHand(player.Cards.ToList().Concat(CommunityCards)),
                         CurrentPot.PayoutPlayer(player.Player.Id))
                 });
             }
