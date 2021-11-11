@@ -5,6 +5,8 @@ namespace PokerSim.Engine.Game
 {
     public class PlayerTurnState : IPlayerTurnState
     {
+        private IHandBuilder _handBuilder = new HandBuilder();
+
         public int CurrentBet { get; private set; }
 
         public int CurrentPot { get; private set; }
@@ -34,6 +36,11 @@ namespace PokerSim.Engine.Game
             Blinds = blinds;
             ChipCount = chipCount;
             NumRemainingPlayersInHand = numberPlayersLeft;
+        }
+
+        public IHand GetHand()
+        {
+            return _handBuilder.BuildHand(PlayerCards, CommunityCards);
         }
     }
 }

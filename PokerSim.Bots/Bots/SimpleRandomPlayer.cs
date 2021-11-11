@@ -45,12 +45,12 @@ namespace PokerSim.Bots
             }
             if (p < _raiseProb + _checkCallProb)
             {
-                return TurnResult.CheckOrCall(this);
+                return TurnResult.CheckOrCallAny(this);
             }
 
             if (state.CurrentBet == 0)
             {
-                return TurnResult.CheckOrCall(this);
+                return TurnResult.CheckOrCallAny(this);
             }
             return TurnResult.Fold(this);
 

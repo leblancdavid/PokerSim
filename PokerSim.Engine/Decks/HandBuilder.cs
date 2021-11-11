@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PokerSim.Engine.Decks
 {
-    public class HandBuilder : IHandBuilder
+    public class HandBuilder : BaseHandBuilder
     {
         protected List<IHandBuilder> _builders = new List<IHandBuilder>();
 
@@ -23,7 +23,7 @@ namespace PokerSim.Engine.Decks
             _builders.Add(new HighCardHandBuilder());
         }
 
-        public IHand BuildHand(IEnumerable<Card> cards)
+        public override IHand BuildHand(IEnumerable<Card> cards)
         {
             foreach(var builder in _builders)
             {
@@ -36,7 +36,7 @@ namespace PokerSim.Engine.Decks
             return new HighCardHand(cards.OrderByDescending(x => x.Value));
         }
 
-        public bool ContainsHand(IEnumerable<Card> cards)
+        public override bool ContainsHand(IEnumerable<Card> cards)
         {
             return true;
         }

@@ -14,5 +14,7 @@ namespace PokerSim.Engine.Game
 
         IEnumerable<Card> CommunityCards { get; }
         IEnumerable<Card> PlayerCards { get; }
+
+        IHand GetHand();
     }
 }

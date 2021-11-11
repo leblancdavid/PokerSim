@@ -26,13 +26,20 @@ namespace PokerSim.Engine.Players
             return new TurnResult(player);
         }
 
-        public static TurnResult CheckOrCall(IPlayer player)
+        public static TurnResult CheckOrCallAny(IPlayer player)
         {
             return new TurnResult(player)
             {
                 Decision = TurnDecisionType.CheckOrCall,
                 RaiseAmount = 0
             };
+        }
+
+        public static TurnResult CheckOrFoldAny(IPlayer player, int currentBet)
+        {
+            if (currentBet > 0)
+                return Fold(player);
+            return CheckOrCallAny(player);
         }
 
         public static TurnResult Raise(IPlayer player, int amount)

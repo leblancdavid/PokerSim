@@ -54,12 +54,12 @@ namespace PokerSim.SamplePlayerPlugin
             }
             if (p < _configuration.RaiseProb + _configuration.CheckCallProb)
             {
-                return TurnResult.CheckOrCall(this);
+                return TurnResult.CheckOrCallAny(this);
             }
 
             if (state.CurrentBet == 0)
             {
-                return TurnResult.CheckOrCall(this);
+                return TurnResult.CheckOrCallAny(this);
             }
             return TurnResult.Fold(this);
 
