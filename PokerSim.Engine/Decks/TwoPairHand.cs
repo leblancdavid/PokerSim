@@ -38,7 +38,7 @@ namespace PokerSim.Engine.Decks
     public class TwoPairHand : BaseHand
     {
         public TwoPairHand(IEnumerable<Card> highPair, IEnumerable<Card> lowPair, Card card)
-            : base(HandType.TwoPair, highPair.Concat(lowPair).Concat(new List<Card>() { card }))
+            : base(HandType.TwoPair, highPair.ToList().Concat(lowPair.ToList()).Concat(new List<Card>() { card }))
         {
             Score = 0;
             long scoreFactor = 100000;

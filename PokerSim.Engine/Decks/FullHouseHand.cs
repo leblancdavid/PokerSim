@@ -65,7 +65,7 @@ namespace PokerSim.Engine.Decks
     public class FullHouseHand : BaseHand
     {
         public FullHouseHand(IEnumerable<Card> triplet, IEnumerable<Card> pair)
-            : base(HandType.FullHouse, triplet.Concat(pair))
+            : base(HandType.FullHouse, triplet.ToList().Concat(pair.ToList()))
         {
             Score = 0;
             long scoreFactor = 100000;
