@@ -68,11 +68,15 @@ namespace PokerSim.Engine.Game
 
         public void PlayHand()
         {
+
             CurrentPot = new PotState(_players);
             _communityCards.Clear();
             Deck = new Deck();
             Deck.Shuffle();
             UpdateBlinds();
+
+            if (SmallBlindIndex == BigBlindIndex)
+                return;
 
             CurrentPot.AddToPot(_players[SmallBlindIndex].Player.Id, SmallBlindValue);
             CurrentPot.AddToPot(_players[BigBlindIndex].Player.Id, BigBlindValue);
@@ -135,13 +139,17 @@ namespace PokerSim.Engine.Game
             if(remainingPlayers.Count() == 1)
             {
                 var player = remainingPlayers.FirstOrDefault();
-                return new HandResult(new List<PlayerHandResult>()
+                var handResult = new HandResult(new List<PlayerHandResult>()
                 {
                     new PlayerHandResult(
-                        player.Player, 
+                        player.Player,
                         HandBuilder.BuildHand(player.Cards.ToList().Concat(CommunityCards)),
                         CurrentPot.PayoutPlayer(player.Player.Id))
                 });
+
+                player.Fold();
+                player.IsAllIn = false;
+                return handResult;
             }
 
             var playerResults = remainingPlayers.Select(x => 

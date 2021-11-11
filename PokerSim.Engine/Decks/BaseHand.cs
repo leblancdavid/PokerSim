@@ -13,7 +13,7 @@ namespace PokerSim.Engine.Decks
         public virtual bool IsValid => true;
 
         public double NormalizedScore => (double)RawScore / (double)MaxPossibleScore;
-        public double RelativeScore => (double)NormalizedScore * (double)HandType / 10.0;
+        public double RelativeScore => (double)NormalizedScore * (double)HandType / 10.0; //there are 10 possible hands
 
         public BaseHand(HandType handType, IEnumerable<Card> cards)
         {

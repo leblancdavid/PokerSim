@@ -35,6 +35,7 @@ namespace PokerSim.Engine.Game
         public void Fold()
         {
             _cards.Clear();
+            IsAllIn = false;
         }
     }
 }

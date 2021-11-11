@@ -28,7 +28,7 @@ namespace PokerSim.Bots
         {
             _checkCallProb = checkCallProb;
             _raiseProb = raiseProb;
-            Name = name;
+            Name = "(Bot-SimpleRandom) " + name;
             Id = Guid.NewGuid();
         }
 
