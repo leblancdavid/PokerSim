@@ -1,12 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PokerSim.Bots\PokerSim.Bots.csproj" />
     <ProjectReference Include="..\PokerSim.Engine\PokerSim.Engine.csproj" />
   </ItemGroup>
 
