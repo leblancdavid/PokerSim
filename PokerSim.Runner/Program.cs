@@ -11,10 +11,11 @@ namespace PokerSim.Runner
     {
         static void Main(string[] args)
         {
-            var pluginPlayers = PlayerPluginLoader.LoadPluginPlayers(args[0]);
-
             var engine = new TexasHoldemGameEngine(new ConsoleGameEventLogger(true));
-            foreach(var player in pluginPlayers)
+
+            /*
+            var pluginPlayers = PlayerPluginLoader.LoadPluginPlayers(args[0]);
+            foreach (var player in pluginPlayers)
             {
                 engine.AddPlayer(player);
             }
@@ -26,8 +27,14 @@ namespace PokerSim.Runner
             {
                 engine.AddPlayer(botFactory.GetRandomPlayer());
             }
+            */
 
-            for(int i = 0; i < 10; ++i)
+            engine.AddPlayer(new DeterministicPlayerV1("Bot1"));
+            engine.AddPlayer(new DeterministicPlayerV1("Bot2"));
+            engine.AddPlayer(new SimpleRandomPlayer("Bot3"));
+            engine.AddPlayer(new SimpleRandomPlayer("Bot4"));
+
+            for (int i = 0; i < 10; ++i)
             {
                 Console.WriteLine("***** NEW GAME STARTED *****");
                 engine.Play();

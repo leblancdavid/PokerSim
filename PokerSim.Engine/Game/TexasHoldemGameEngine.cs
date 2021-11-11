@@ -30,7 +30,7 @@ namespace PokerSim.Engine.Game
         private int _lastBettingPlayerIndex = 1;
         private int _currentPlayerIndex = 1;
 
-        private int _initialChips = 3;
+        private int _initialChips = 100;
         private TexasHoldemStages _currentStage;
         private IGameEventLogger _logger;
         public TexasHoldemGameEngine(IGameEventLogger logger)
@@ -225,9 +225,17 @@ namespace PokerSim.Engine.Game
                 }
                 else
                 {
-                    _lastBettingPlayerIndex = _currentPlayerIndex;
-                    everyoneBet = false;
-                    CurrentPot.PlayerRaise(player.Player.Id, result.RaiseAmount);
+                    if(result.RaiseAmount + state.CurrentBet > state.ChipCount)
+                    {
+                        CurrentPot.PlayerCallOrCheck(player.Player.Id);
+                    }
+                    else
+                    {
+                        _lastBettingPlayerIndex = _currentPlayerIndex;
+                        everyoneBet = false;
+                        CurrentPot.PlayerRaise(player.Player.Id, result.RaiseAmount);
+                    }
+                    
                 }
 
                 NextPlayer();

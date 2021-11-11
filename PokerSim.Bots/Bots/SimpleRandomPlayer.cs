@@ -10,8 +10,8 @@ namespace PokerSim.Bots
         {
             var random = new Random();
 
-            double checkProb = random.NextDouble() * 0.3 + 0.1;
-            double raiseProb = random.NextDouble() * 0.3 + 0.1;
+            double checkProb = random.NextDouble() / 2.0;
+            double raiseProb = random.NextDouble() / 3.0 + 0.1;
 
             return new SimpleRandomPlayer(BotNameGenerator.GenerateName(random.Next(3, 10)),
                 checkProb, raiseProb);
@@ -24,7 +24,7 @@ namespace PokerSim.Bots
         private double _raiseProb;
         private Random _random = new Random();
 
-        public SimpleRandomPlayer(string name, double checkCallProb, double raiseProb)
+        public SimpleRandomPlayer(string name, double checkCallProb = 0.4, double raiseProb = 0.3)
         {
             _checkCallProb = checkCallProb;
             _raiseProb = raiseProb;
