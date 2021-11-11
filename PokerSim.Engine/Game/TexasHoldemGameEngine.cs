@@ -30,7 +30,7 @@ namespace PokerSim.Engine.Game
         private int _lastBettingPlayerIndex = 1;
         private int _currentPlayerIndex = 1;
 
-        private int _initialChips = 100;
+        private int _initialChips = 3;
         private TexasHoldemStages _currentStage;
         private IGameEventLogger _logger;
         public TexasHoldemGameEngine(IGameEventLogger logger)
@@ -54,6 +54,7 @@ namespace PokerSim.Engine.Game
 
         public void Play()
         {
+            Reset();
             bool winner = false;
             while (!winner)
             {
@@ -66,6 +67,14 @@ namespace PokerSim.Engine.Game
             }
         }
 
+        private void Reset()
+        {
+            foreach (var player in _players)
+            {
+                player.ChipCount = _initialChips;
+            }
+
+        }
         public void PlayHand()
         {
 
@@ -78,20 +87,21 @@ namespace PokerSim.Engine.Game
             if (SmallBlindIndex == BigBlindIndex)
                 return;
 
-            CurrentPot.AddToPot(_players[SmallBlindIndex].Player.Id, SmallBlindValue);
-            CurrentPot.AddToPot(_players[BigBlindIndex].Player.Id, BigBlindValue);
-
             //Each player gets 2 cards
             for (int i = 0; i < 2; ++i)
             {
                 foreach (var player in _players)
                 {
-                    if(!player.IsEliminated)
+                    if (!player.IsEliminated)
                     {
                         player.Deal(Deck.Draw());
                     }
                 }
             }
+
+            CurrentPot.AddToPot(_players[SmallBlindIndex].Player.Id, SmallBlindValue);
+            CurrentPot.AddToPot(_players[BigBlindIndex].Player.Id, BigBlindValue);
+
             _currentStage = TexasHoldemStages.PreFlop;
             _logger.Log(_currentStage, CommunityCards);
             //Pre-flop betting

@@ -23,7 +23,7 @@ namespace PokerSim.Engine.Game
 
         public bool HasFolded => !_cards.Any();
 
-        public bool IsEliminated => ChipCount <= 0;
+        public bool IsEliminated => ChipCount <= 0 && !IsAllIn;
 
         public bool IsAllIn { get; set; }
 
