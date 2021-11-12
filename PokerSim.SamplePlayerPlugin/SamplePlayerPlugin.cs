@@ -45,7 +45,7 @@ namespace PokerSim.SamplePlayerPlugin
             }
         }
 
-        public override TurnResult TakeTurn(IPlayerTurnState state)
+        public override TurnResult TakeTurn(PlayerTurnState state)
         {
             double p = _random.NextDouble();
             if (p < _configuration.RaiseProb)

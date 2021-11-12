@@ -11,8 +11,8 @@ namespace PokerSim.Engine.Game
         public Deck Deck { get; private set; }
         internal PotState CurrentPot { get; private set; }
 
-        private List<IPlayerState> _players = new List<IPlayerState>();
-        internal IEnumerable<IPlayerState> Players => _players;
+        private List<InternalPlayerState> _players = new List<InternalPlayerState>();
+        internal IEnumerable<InternalPlayerState> Players => _players;
 
         private List<Card> _communityCards = new List<Card>();
         public IEnumerable<Card> CommunityCards => _communityCards;
@@ -49,7 +49,7 @@ namespace PokerSim.Engine.Game
 
         public void AddPlayer(IPlayer player)
         {
-            _players.Add(new PlayerState(player, _initialChips));
+            _players.Add(new InternalPlayerState(player, _initialChips));
         }
 
         public GameResult Play()
@@ -270,7 +270,7 @@ namespace PokerSim.Engine.Game
             return _players.Count(x => !x.HasFolded) <= 1;
         }
 
-        private IPlayerTurnState GetCurrentPlayerTurnState(IPlayerState currentPlayer)
+        private PlayerTurnState GetCurrentPlayerTurnState(InternalPlayerState currentPlayer)
         {
             return new PlayerTurnState(CommunityCards,
                 currentPlayer.Cards,

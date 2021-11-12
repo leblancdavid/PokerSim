@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace PokerSim.Engine.Game
 {
-    internal sealed class PlayerState : IPlayerState
+    internal sealed class InternalPlayerState
     {
-        public PlayerState(IPlayer player, int initialChipCount)
+        public InternalPlayerState(IPlayer player, int initialChipCount)
         {
             Player = player;
             ChipCount = initialChipCount;
@@ -17,6 +17,7 @@ namespace PokerSim.Engine.Game
         public IPlayer Player { get; private set; }
 
         public int ChipCount { get; set; }
+        public int PlayerPotSize { get; set; }
 
         private List<Card> _cards = new List<Card>();
         public IEnumerable<Card> Cards => _cards;

@@ -4,73 +4,45 @@ using System.Linq;
 
 namespace PokerSim.Engine.Game
 {
-    internal class PlayerPotState
-    {
-        public int PotSize { get; set; }
-        public bool IsAllIn { get; set; }
-        public bool HasFolded { get; set; }
-    }
 
     internal class PotState
     {
-        Dictionary<Guid, PlayerPotState> _playerPot = new Dictionary<Guid, PlayerPotState>();
 
+        public int TotalPotSize => _playerStates.Sum(x => x.PlayerPotSize);
+        public int MaxPlayerPotSize => _playerStates.Max(x => x.PlayerPotSize);
 
-        public int TotalPotSize => _playerPot.Values.Sum(x => x.PotSize);
-        public int MaxPlayerPotSize => _playerPot.Values.Max(x => x.PotSize);
-
-        private IEnumerable<IPlayerState> _playerStates;
-        public PotState(IEnumerable<IPlayerState> playerStates)
+        private IEnumerable<InternalPlayerState> _playerStates;
+        public PotState(IEnumerable<InternalPlayerState> playerStates)
         {
             _playerStates = playerStates;
-            foreach(var player in _playerStates)
-            {
-                _playerPot.Add(player.Player.Id, new PlayerPotState());
-            }
         }
 
         public void AddToPot(Guid playerId, int amount)
         {
-            if(!_playerPot.ContainsKey(playerId))
-            {
-                _playerPot.Add(playerId, new PlayerPotState());
-            }
-
             var player = _playerStates.FirstOrDefault(x => x.Player.Id == playerId);
             if(amount >= player.ChipCount)
             {
-                _playerPot[playerId].PotSize += player.ChipCount;
-                _playerPot[playerId].IsAllIn = true;
                 player.IsAllIn = true;
                 player.ChipCount = 0;
+                player.PlayerPotSize += player.ChipCount;
             }
             else
             {
-                _playerPot[player.Player.Id].PotSize += amount;
-                _playerPot[player.Player.Id].IsAllIn = false;
                 player.IsAllIn = false;
                 player.ChipCount -= amount;
+                player.PlayerPotSize += amount;
             }
         }
 
         public int ToCallAmount(Guid playerId)
         {
-            if (!_playerPot.ContainsKey(playerId))
+            var player = _playerStates.FirstOrDefault(x => x.Player.Id == playerId);
+            if (player == null)
             {
                 return MaxPlayerPotSize;
             }
 
-            return MaxPlayerPotSize - _playerPot[playerId].PotSize;
-        }
-
-        public void PlayerFold(Guid playerId)
-        {
-            if (!_playerPot.ContainsKey(playerId))
-            {
-                return;
-            }
-
-            _playerPot[playerId].HasFolded = true;
+            return MaxPlayerPotSize - player.PlayerPotSize;
         }
 
         public void PlayerCallOrCheck(Guid playerId)
@@ -93,16 +65,17 @@ namespace PokerSim.Engine.Game
 
         public int PayoutPlayer(Guid playerId, double splitRatio = 1.0)
         {
-            if (!_playerPot.ContainsKey(playerId))
+
+            var player = _playerStates.FirstOrDefault(x => x.Player.Id == playerId);
+            if (player == null)
                 return 0;
 
-            var playerPotSize = _playerPot[playerId].PotSize;
+            var playerPotSize = player.PlayerPotSize;
             int totalGains = 0;
-            var player = _playerStates.FirstOrDefault(x => x.Player.Id == playerId);
-            foreach (var pot in _playerPot)
+            foreach (var pot in _playerStates)
             {
-                var gains = (int)Math.Ceiling(Math.Min(playerPotSize, pot.Value.PotSize) * splitRatio - 0.5);
-                pot.Value.PotSize -= gains;
+                var gains = (int)Math.Ceiling(Math.Min(playerPotSize, pot.PlayerPotSize) * splitRatio - 0.5);
+                pot.PlayerPotSize -= gains;
                 player.ChipCount += gains;
                 totalGains += gains;
             }

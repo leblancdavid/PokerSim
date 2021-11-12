@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PokerSim.Engine.Game
 {
-    public class PlayerTurnState : IPlayerTurnState
+    public class PlayerTurnState
     {
         private IHandBuilder _handBuilder = new HandBuilder();
 

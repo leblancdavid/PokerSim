@@ -45,7 +45,7 @@ namespace PokerSim.Bots
             _flopFoldHandThreshold = foldThreshold;
         }
 
-        public override TurnResult TakeTurn(IPlayerTurnState state)
+        public override TurnResult TakeTurn(PlayerTurnState state)
         {
             switch (state.CurrentStage)
             {
@@ -59,7 +59,7 @@ namespace PokerSim.Bots
             }
         }
 
-        private TurnResult PreFlopTurn(IPlayerTurnState state)
+        private TurnResult PreFlopTurn(PlayerTurnState state)
         {
             var hand = state.GetHand();
             if (hand.NormalizedScore > _preFlopRaiseHandThreshold)
@@ -76,7 +76,7 @@ namespace PokerSim.Bots
             }
         }
 
-        private TurnResult PostPreFlopTurn(IPlayerTurnState state)
+        private TurnResult PostPreFlopTurn(PlayerTurnState state)
         {
             var hand = state.GetHand();
             if (hand.RelativeScore > _flopRaiseHandThreshold)
