@@ -51,5 +51,20 @@ namespace PokerSim.Engine.Decks
             }
             return output;
         }
+
+        public static IEnumerable<Card> FromString(string cardsString)
+        {
+            var cards = new List<Card>();
+            if(string.IsNullOrEmpty(cardsString) || cardsString.Length % 2 != 0)
+            {
+                return cards;
+            }
+
+            for(int i = 0; i < cardsString.Length; i += 2)
+            {
+                cards.Add(Card.FromString(cardsString.Substring(i, 2)));
+            }
+            return cards;
+        }
     }
 }

@@ -40,13 +40,11 @@ namespace PokerSim.Engine.Decks
         {
             _cards.Clear();
             var suits = Enum.GetValues(typeof(CardSuit)).Cast<CardSuit>();
-            int id = 1;
             foreach(var suit in suits)
             {
                 for(int i = 2; i <= 14; ++i)
                 {
-                    _cards.Add(new Card(id, suit, i));
-                    ++id;
+                    _cards.Add(new Card(suit, i));
                 }
             }
         }
