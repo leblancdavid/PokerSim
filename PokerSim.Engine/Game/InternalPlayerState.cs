@@ -74,6 +74,8 @@ namespace PokerSim.Engine.Game
             var raise = currentPot.ToCallAmount(Player.Id) + amount;
             if (raise > 0)
             {
+                NumberRaises++;
+                LastAmountRaised = amount;
                 AddToPot(raise);
             }
         }

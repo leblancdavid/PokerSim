@@ -38,6 +38,7 @@ namespace PokerSim.Engine.Game
         public TexasHoldemStages CurrentStage { get; private set; }
 
         public IHand BuildCurrentPlayerHand() => HandBuilder.BuildHand(CurrentPlayerCards.ToList().Concat(CommunityCards.ToList()));
+        public IEnumerable<IPlayerState> GetRemainingPlayers() => _players.Where(x => !x.IsEliminated && !x.HasFolded);
 
         private IGameEventLogger _logger;
         internal InternalGameState(IGameEventLogger logger)
@@ -282,5 +283,6 @@ namespace PokerSim.Engine.Game
             }
             while (_players[CurrentPlayerIndex].IsEliminated);
         }
+
     }
 }

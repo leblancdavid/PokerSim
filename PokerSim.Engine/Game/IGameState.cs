@@ -18,5 +18,6 @@ namespace PokerSim.Engine.Game
         int CurrentPlayerChipCount { get; }
         IEnumerable<Card> CurrentPlayerCards { get; }
         IHand BuildCurrentPlayerHand();
+        IEnumerable<IPlayerState> GetRemainingPlayers();
     }
 }
