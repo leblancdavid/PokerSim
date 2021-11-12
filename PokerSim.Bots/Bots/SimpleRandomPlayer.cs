@@ -36,19 +36,19 @@ namespace PokerSim.Bots
 
         public Guid Id { get; private set; }
 
-        public TurnResult TakeTurn(PlayerTurnState state)
+        public TurnResult TakeTurn(IGameState state)
         {
             double p = _random.NextDouble();
             if (p < _raiseProb)
             {
-                return TurnResult.Raise(this, state.Blinds * 3);
+                return TurnResult.Raise(this, state.BigBlindValue * 3);
             }
             if (p < _raiseProb + _checkCallProb)
             {
                 return TurnResult.CheckOrCallAny(this);
             }
 
-            if (state.CurrentBet == 0)
+            if (state.CurrentBetToCall == 0)
             {
                 return TurnResult.CheckOrCallAny(this);
             }

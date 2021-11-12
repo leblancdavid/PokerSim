@@ -18,6 +18,6 @@ namespace PokerSim.Engine.Players
 
         public Guid Id { get; private set; }
 
-        public abstract TurnResult TakeTurn(PlayerTurnState state);
+        public abstract TurnResult TakeTurn(IGameState state);
     }
 }

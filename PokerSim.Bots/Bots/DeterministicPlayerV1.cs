@@ -45,7 +45,7 @@ namespace PokerSim.Bots
             _flopFoldHandThreshold = foldThreshold;
         }
 
-        public override TurnResult TakeTurn(PlayerTurnState state)
+        public override TurnResult TakeTurn(IGameState state)
         {
             switch (state.CurrentStage)
             {
@@ -59,16 +59,16 @@ namespace PokerSim.Bots
             }
         }
 
-        private TurnResult PreFlopTurn(PlayerTurnState state)
+        private TurnResult PreFlopTurn(IGameState state)
         {
-            var hand = state.GetHand();
+            var hand = state.BuildCurrentPlayerHand();
             if (hand.NormalizedScore > _preFlopRaiseHandThreshold)
             {
-                return TurnResult.Raise(this, state.Blinds * 3);
+                return TurnResult.Raise(this, state.BigBlindValue * 3);
             }
             else if (hand.NormalizedScore < _preFlopFoldHandThreshold)
             {
-                return TurnResult.CheckOrFoldAny(this, state.CurrentBet);
+                return TurnResult.CheckOrFoldAny(this, state.CurrentBetToCall);
             }
             else
             {
@@ -76,16 +76,16 @@ namespace PokerSim.Bots
             }
         }
 
-        private TurnResult PostPreFlopTurn(PlayerTurnState state)
+        private TurnResult PostPreFlopTurn(IGameState state)
         {
-            var hand = state.GetHand();
+            var hand = state.BuildCurrentPlayerHand();
             if (hand.RelativeScore > _flopRaiseHandThreshold)
             {
-                return TurnResult.Raise(this, state.Blinds * 3);
+                return TurnResult.Raise(this, state.BigBlindValue * 3);
             }
             else if (hand.RelativeScore < _flopFoldHandThreshold)
             {
-                if (state.CurrentBet == 0)
+                if (state.CurrentBetToCall == 0)
                 {
                     return TurnResult.CheckOrCallAny(this);
                 }
