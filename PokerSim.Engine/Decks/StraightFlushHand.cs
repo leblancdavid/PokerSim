@@ -52,7 +52,7 @@ namespace PokerSim.Engine.Decks
 
             var straight = cards.Where(x => x.Suit == suitGroup.Key).OrderByDescending(x => x.Value).ToList();
             bool containsStraight = false;
-            for (int i = 0; i < straight.Count - 5; ++i)
+            for (int i = 0; i < straight.Count - 4; ++i)
             {
                 int val = straight[i].Value;
                 containsStraight = true;

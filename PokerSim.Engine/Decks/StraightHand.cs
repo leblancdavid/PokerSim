@@ -37,7 +37,7 @@ namespace PokerSim.Engine.Decks
         {
             var distinct = cards.Select(x => x.Value).Distinct().OrderByDescending(x => x).ToList();
             bool containsStraight = false;
-            for(int i = 0; i < distinct.Count - 5; ++i)
+            for(int i = 0; i < distinct.Count - 4; ++i)
             {
                 int val = distinct[i];
                 containsStraight = true;
