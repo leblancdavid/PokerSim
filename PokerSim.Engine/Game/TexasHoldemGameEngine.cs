@@ -108,8 +108,8 @@ namespace PokerSim.Engine.Game
                 }
             }
 
-            CurrentPot.AddToPot(_players[SmallBlindIndex].Player.Id, SmallBlindValue);
-            CurrentPot.AddToPot(_players[BigBlindIndex].Player.Id, BigBlindValue);
+            _players[SmallBlindIndex].AddToPot(SmallBlindValue);
+            _players[BigBlindIndex].AddToPot(BigBlindValue);
 
             _currentStage = TexasHoldemStages.PreFlop;
             _logger.Log(_currentStage, CommunityCards);
@@ -221,26 +221,25 @@ namespace PokerSim.Engine.Game
                 if (result.Decision == TurnDecisionType.Fold)
                 {
                     player.Fold();
-                    CurrentPot.PlayerFold(player.Player.Id);
                     if (AllPlayersFolded())
                         return false;
                     
                 }
                 else if(result.Decision == TurnDecisionType.CheckOrCall)
                 {
-                    CurrentPot.PlayerCallOrCheck(player.Player.Id);
+                    player.CallOrCheck(CurrentPot);
                 }
                 else
                 {
                     if(result.RaiseAmount + state.CurrentBet > state.ChipCount)
                     {
-                        CurrentPot.PlayerCallOrCheck(player.Player.Id);
+                        player.CallOrCheck(CurrentPot);
                     }
                     else
                     {
                         _lastBettingPlayerIndex = _currentPlayerIndex;
                         everyoneBet = false;
-                        CurrentPot.PlayerRaise(player.Player.Id, result.RaiseAmount);
+                        player.Raise(CurrentPot, result.RaiseAmount);
                     }
                     
                 }

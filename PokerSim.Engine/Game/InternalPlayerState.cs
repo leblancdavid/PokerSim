@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace PokerSim.Engine.Game
 {
-    internal sealed class InternalPlayerState
+    internal sealed class InternalPlayerState : IPlayerState
     {
         public InternalPlayerState(IPlayer player, int initialChipCount)
         {
@@ -28,6 +28,9 @@ namespace PokerSim.Engine.Game
 
         public bool IsAllIn { get; set; }
 
+        public int NumberRaises { get; set; }
+        public int LastAmountRaised { get; set; }
+
         public void Deal(Card card)
         {
             _cards.Add(card);
@@ -37,6 +40,42 @@ namespace PokerSim.Engine.Game
         {
             _cards.Clear();
             IsAllIn = false;
+            NumberRaises = 0;
+            LastAmountRaised = 0;
+        }
+
+        public void AddToPot(int amount)
+        {
+            if (amount >= ChipCount)
+            {
+                IsAllIn = true;
+                ChipCount = 0;
+                PlayerPotSize += ChipCount;
+            }
+            else
+            {
+                IsAllIn = false;
+                ChipCount -= amount;
+                PlayerPotSize += amount;
+            }
+        }
+
+        public void CallOrCheck(PotState currentPot)
+        {
+            var toCall = currentPot.ToCallAmount(Player.Id);
+            if (toCall > 0)
+            {
+                AddToPot(toCall);
+            }
+        }
+
+        public void Raise(PotState currentPot, int amount)
+        {
+            var raise = currentPot.ToCallAmount(Player.Id) + amount;
+            if (raise > 0)
+            {
+                AddToPot(raise);
+            }
         }
     }
 }

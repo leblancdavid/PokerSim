@@ -17,23 +17,6 @@ namespace PokerSim.Engine.Game
             _playerStates = playerStates;
         }
 
-        public void AddToPot(Guid playerId, int amount)
-        {
-            var player = _playerStates.FirstOrDefault(x => x.Player.Id == playerId);
-            if(amount >= player.ChipCount)
-            {
-                player.IsAllIn = true;
-                player.ChipCount = 0;
-                player.PlayerPotSize += player.ChipCount;
-            }
-            else
-            {
-                player.IsAllIn = false;
-                player.ChipCount -= amount;
-                player.PlayerPotSize += amount;
-            }
-        }
-
         public int ToCallAmount(Guid playerId)
         {
             var player = _playerStates.FirstOrDefault(x => x.Player.Id == playerId);
@@ -45,23 +28,6 @@ namespace PokerSim.Engine.Game
             return MaxPlayerPotSize - player.PlayerPotSize;
         }
 
-        public void PlayerCallOrCheck(Guid playerId)
-        {
-            var toCall = ToCallAmount(playerId);
-            if(toCall > 0)
-            {
-                AddToPot(playerId, toCall);
-            }
-        }
-
-        public void PlayerRaise(Guid playerId, int amount)
-        {
-            var raise = ToCallAmount(playerId) + amount;
-            if (raise > 0)
-            {
-                AddToPot(playerId, raise);
-            }
-        }
 
         public int PayoutPlayer(Guid playerId, double splitRatio = 1.0)
         {
