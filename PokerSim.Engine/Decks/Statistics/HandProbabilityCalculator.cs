@@ -70,8 +70,8 @@ namespace PokerSim.Engine.Decks.Statistics
                 return new HandProbability(HandType.TwoPair, 1, 0.75, GetOutProbability((cards.Count() - 2) * 3, cards.Count()));
             }
 
-
-            return new HandProbability(HandType.TwoPair, 2, 0.5, GetOutProbability((cards.Count() - 2) * 3, cards.Count()));
+            var p = GetOutProbability((cards.Count() - 2) * 3, cards.Count());
+            return new HandProbability(HandType.TwoPair, 2, 0.5, p * p);
         }
 
         private HandProbability CalculateThreeOfAKindHand(IEnumerable<Card> cards)
@@ -81,10 +81,11 @@ namespace PokerSim.Engine.Decks.Statistics
                 return new HandProbability(HandType.ThreeOfAKind, 0, 1.0, 1.0);
             }
 
+            double tripletProb = GetOutProbability(2, cards.Count());
             //If there's a pair
-            if(cards.GroupBy(x => x.Value).Where(g => g.Count() == 2).Count() == 1)
+            if (cards.GroupBy(x => x.Value).Where(g => g.Count() == 2).Count() == 1)
             {
-                return new HandProbability(HandType.ThreeOfAKind, 1, 0.66667, GetOutProbability(2, cards.Count()));
+                return new HandProbability(HandType.ThreeOfAKind, 1, 0.66667, tripletProb);
             }
 
 
@@ -95,7 +96,7 @@ namespace PokerSim.Engine.Decks.Statistics
 
             //This logic is probably wrong but should be an OK estimate?!?
             double pairProb = GetOutProbability(cards.Count() * 3, cards.Count());
-            return new HandProbability(HandType.ThreeOfAKind, 2, 0.33333, pairProb * pairProb);
+            return new HandProbability(HandType.ThreeOfAKind, 2, 0.33333, pairProb * tripletProb);
         }
 
         private HandProbability CalculateStraightHand(IEnumerable<Card> cards)
@@ -192,7 +193,7 @@ namespace PokerSim.Engine.Decks.Statistics
             {
                 //if you have a triplet, you should have 80% of the cards you need for a full house,
                 //for each other card you have, there should be a chance to draw a pair 
-                return new HandProbability(HandType.FullHouse, 1, 0.8, GetOutProbability((cards.Count() - 2)* 3, cards.Count()));
+                return new HandProbability(HandType.FullHouse, 1, 0.8, GetOutProbability((cards.Count() - 3) * 3, cards.Count()));
             }
             
             //If you have no triplets but 2 or more pairs, you just need 1 card
@@ -205,7 +206,7 @@ namespace PokerSim.Engine.Decks.Statistics
             if(pairs.Count() == 1)
             {
                 double probToDrawTriplet = GetOutProbability(2, cards.Count());
-                double probToDrawAPair = GetOutProbability((cards.Count() - 1) * 3, cards.Count());
+                double probToDrawAPair = GetOutProbability((cards.Count() - 2) * 3, cards.Count());
                 return new HandProbability(HandType.FullHouse, 2, 0.6, probToDrawTriplet * probToDrawAPair);
             }
 
