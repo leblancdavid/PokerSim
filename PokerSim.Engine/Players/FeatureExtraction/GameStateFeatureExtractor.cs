@@ -22,7 +22,7 @@ namespace PokerSim.Engine.Players.FeatureExtraction
             _handProbabilityCalculator = handProbabilityCalculator;
         }
 
-        public int FeatureLength => 0;
+        public int FeatureLength => 69;
 
         public double[] Extract(IGameState state)
         {

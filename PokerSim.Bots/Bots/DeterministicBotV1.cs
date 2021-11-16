@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PokerSim.Bots
 {
-    public class DeterministicPlayerV1PlayerFactory : IBotFactory
+    public class DeterministicBotV1BotFactory : IBotFactory
     {
         public IPlayer GetRandomPlayer()
         {
@@ -20,19 +20,19 @@ namespace PokerSim.Bots
             double raise = random.NextDouble() / 5.0 + 0.1;
             double fold = random.NextDouble() / 5.0 + 0.05;
 
-            return new DeterministicPlayerV1(BotNameGenerator.GenerateName(random.Next(3, 10)),
+            return new DeterministicBotV1(BotNameGenerator.GenerateName(random.Next(3, 10)),
                 pfRaise, pfFold, raise, fold);
         }
     }
 
-    public class DeterministicPlayerV1 : PlayerPlugin
+    public class DeterministicBotV1 : PlayerPlugin
     {
         double _preFlopRaiseHandThreshold = 0.75;
         double _preFlopFoldHandThreshold = 0.25;
         double _flopRaiseHandThreshold = 0.15;
         double _flopFoldHandThreshold = 0.05;
 
-        public DeterministicPlayerV1(string name,
+        public DeterministicBotV1(string name,
             double preFlopRaiseThreshold = 0.75,
             double preFlopFoldThreshold = 0.25,
             double raiseThreshold = 0.15,

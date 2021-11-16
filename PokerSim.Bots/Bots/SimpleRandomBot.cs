@@ -4,7 +4,7 @@ using System;
 
 namespace PokerSim.Bots
 {
-    public class SimpleRandomPlayerFactory : IBotFactory
+    public class SimpleRandomBotFactory : IBotFactory
     {
         public IPlayer GetRandomPlayer()
         {
@@ -13,18 +13,18 @@ namespace PokerSim.Bots
             double checkProb = random.NextDouble() / 2.0;
             double raiseProb = random.NextDouble() / 3.0 + 0.1;
 
-            return new SimpleRandomPlayer(BotNameGenerator.GenerateName(random.Next(3, 10)),
+            return new SimpleRandomBot(BotNameGenerator.GenerateName(random.Next(3, 10)),
                 checkProb, raiseProb);
         }
     }
 
-    public class SimpleRandomPlayer : IPlayer
+    public class SimpleRandomBot : IPlayer
     {
         private double _checkCallProb;
         private double _raiseProb;
         private Random _random = new Random();
 
-        public SimpleRandomPlayer(string name, double checkCallProb = 0.4, double raiseProb = 0.3)
+        public SimpleRandomBot(string name, double checkCallProb = 0.4, double raiseProb = 0.3)
         {
             _checkCallProb = checkCallProb;
             _raiseProb = raiseProb;

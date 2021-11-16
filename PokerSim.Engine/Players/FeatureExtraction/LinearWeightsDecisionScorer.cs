@@ -35,5 +35,20 @@ namespace PokerSim.Engine.Players.FeatureExtraction
 
             return new DecisionScores(foldScore, checkScore, raiseScore, allinScore);
         }
+
+        public static LinearWeightsDecisionScorer InitWithRandomWeights(IGameStateFeatureExtractor featureExtractor)
+        {
+            var rng = new Random();
+            var weights = new double[4, featureExtractor.FeatureLength];
+            for(int i = 0; i < featureExtractor.FeatureLength; ++i)
+            {
+                weights[0, i] = rng.NextDouble() * 2.0 - 1.0;
+                weights[1, i] = rng.NextDouble() * 2.0 - 1.0;
+                weights[2, i] = rng.NextDouble() * 2.0 - 1.0;
+                weights[3, i] = rng.NextDouble() * 2.0 - 1.0;
+            }
+
+            return new LinearWeightsDecisionScorer(featureExtractor, weights);
+        }
     }
 }

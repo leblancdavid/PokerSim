@@ -204,7 +204,7 @@ namespace PokerSim.Engine.Game
                 }
                 else
                 {
-                    if (result.RaiseAmount + CurrentBetToCall > CurrentPlayerChipCount)
+                    if (result.RaiseAmount <= 0 || result.RaiseAmount + CurrentBetToCall > CurrentPlayerChipCount)
                     {
                         player.CallOrCheck(CurrentPot);
                     }

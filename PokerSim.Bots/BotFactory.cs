@@ -10,8 +10,9 @@ namespace PokerSim.Bots
         private Random _random = new Random();
         private List<IBotFactory> _botTypeFactories = new List<IBotFactory>()
         {
-            new SimpleRandomPlayerFactory(),
-            new DeterministicPlayerV1PlayerFactory()
+            new SimpleRandomBotFactory(),
+            new DeterministicBotV1BotFactory(),
+            new DecisionScoringBotFactory()
         };
 
         public IPlayer GetRandomPlayer()

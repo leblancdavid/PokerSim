@@ -31,8 +31,8 @@ namespace PokerSim.Runner
             */
 
             //engine.AddPlayer(new DeterministicPlayerV1("Bot1", 0.9, 0.2, 0.25, 0.1));
-            engine.AddPlayer(new DeterministicPlayerV1("Bot2", 0.95, 0.25, 0.3, 0.05));
-            int numBotsToAdd = 7;
+           // engine.AddPlayer(new DeterministicBotV1("Bot2", 0.95, 0.25, 0.3, 0.05));
+            int numBotsToAdd = 8;
             var botFactory = new BotFactory();
             for (int i = 0; i < numBotsToAdd; ++i)
             {
