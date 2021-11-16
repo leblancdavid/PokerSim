@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace PokerSim.Engine.Decks
 {
-    public class StraightHandBuilder : IHandBuilder
+    public class StraightHandBuilder : BaseHandBuilder
     {
-        public IHand BuildHand(IEnumerable<Card> cards)
+        public override IHand BuildHand(IEnumerable<Card> cards)
         {
             var straight = new List<Card>();
             var distinct = cards.Select(x => x.Value).Distinct().OrderBy(x => x).ToList();
@@ -33,11 +33,11 @@ namespace PokerSim.Engine.Decks
             return new StraightHand(straight.OrderByDescending(x => x.Value).Take(5));
         }
 
-        public bool ContainsHand(IEnumerable<Card> cards)
+        public override bool ContainsHand(IEnumerable<Card> cards)
         {
             var distinct = cards.Select(x => x.Value).Distinct().OrderByDescending(x => x).ToList();
             bool containsStraight = false;
-            for(int i = 0; i < distinct.Count - 5; ++i)
+            for(int i = 0; i < distinct.Count - 4; ++i)
             {
                 int val = distinct[i];
                 containsStraight = true;

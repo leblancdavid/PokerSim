@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace PokerSim.Engine.Decks
 {
-    public class StraightFlushHandBuilder : IHandBuilder
+    public class StraightFlushHandBuilder : BaseHandBuilder
     {
-        public IHand BuildHand(IEnumerable<Card> cards)
+        public override IHand BuildHand(IEnumerable<Card> cards)
         {
             var suitGroup = cards.GroupBy(x => x.Suit).FirstOrDefault(x => x.Count() >= 5);
             if(suitGroup == null)
@@ -42,7 +42,7 @@ namespace PokerSim.Engine.Decks
                 .Take(5));
         }
 
-        public bool ContainsHand(IEnumerable<Card> cards)
+        public override bool ContainsHand(IEnumerable<Card> cards)
         {
             var suitGroup = cards.GroupBy(x => x.Suit).FirstOrDefault(x => x.Count() >= 5);
             if (suitGroup == null)
@@ -52,7 +52,7 @@ namespace PokerSim.Engine.Decks
 
             var straight = cards.Where(x => x.Suit == suitGroup.Key).OrderByDescending(x => x.Value).ToList();
             bool containsStraight = false;
-            for (int i = 0; i < straight.Count - 5; ++i)
+            for (int i = 0; i < straight.Count - 4; ++i)
             {
                 int val = straight[i].Value;
                 containsStraight = true;

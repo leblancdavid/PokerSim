@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace PokerSim.Engine.Decks
 {
-    public class HighCardHandBuilder : IHandBuilder
+    public class HighCardHandBuilder : BaseHandBuilder
     {
-        public IHand BuildHand(IEnumerable<Card> cards)
+        public override IHand BuildHand(IEnumerable<Card> cards)
         {
             return new HighCardHand(cards.OrderByDescending(x => x.Value).Take(5));
         }
 
-        public bool ContainsHand(IEnumerable<Card> cards)
+        public override bool ContainsHand(IEnumerable<Card> cards)
         {
             return cards.Distinct().Count() == cards.Count();
         }

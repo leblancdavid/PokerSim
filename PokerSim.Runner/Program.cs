@@ -11,10 +11,12 @@ namespace PokerSim.Runner
     {
         static void Main(string[] args)
         {
-            var pluginPlayers = PlayerPluginLoader.LoadPluginPlayers(args[0]);
+            //var engine = new TexasHoldemGameEngine(new ConsoleGameEventLogger(true));
+            var engine = new TexasHoldemGameEngine(null);
 
-            var engine = new TexasHoldemGameEngine(new ConsoleGameEventLogger(true));
-            foreach(var player in pluginPlayers)
+            /*
+            var pluginPlayers = PlayerPluginLoader.LoadPluginPlayers(args[0]);
+            foreach (var player in pluginPlayers)
             {
                 engine.AddPlayer(player);
             }
@@ -26,12 +28,32 @@ namespace PokerSim.Runner
             {
                 engine.AddPlayer(botFactory.GetRandomPlayer());
             }
+            */
 
-            for(int i = 0; i < 10; ++i)
+            //engine.AddPlayer(new DeterministicPlayerV1("Bot1", 0.9, 0.2, 0.25, 0.1));
+           // engine.AddPlayer(new DeterministicBotV1("Bot2", 0.95, 0.25, 0.3, 0.05));
+            int numBotsToAdd = 8;
+            var botFactory = new BotFactory();
+            for (int i = 0; i < numBotsToAdd; ++i)
             {
-                Console.WriteLine("***** NEW GAME STARTED *****");
-                engine.Play();
-                Console.WriteLine("***** GAME ENDED *****");
+                engine.AddPlayer(botFactory.GetRandomPlayer());
+            }
+
+            var simulationResults = new SimulationResult();
+            for (int i = 0; i < 1000; ++i)
+            {
+                var result = engine.Play();
+                //Console.WriteLine("***** NEW GAME STARTED *****");
+                simulationResults.NotifyGameCompleted(result);
+                //Console.WriteLine("***** GAME ENDED *****");
+                if (i % 10 == 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("***** LEADERBOARD *****");
+                    Console.WriteLine(simulationResults.ToString());
+                    Console.WriteLine("***** LEADERBOARD *****");
+                }
+               
             }
 
         }

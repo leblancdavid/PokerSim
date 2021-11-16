@@ -45,21 +45,21 @@ namespace PokerSim.SamplePlayerPlugin
             }
         }
 
-        public override TurnResult TakeTurn(IPlayerTurnState state)
+        public override TurnResult TakeTurn(IGameState state)
         {
             double p = _random.NextDouble();
             if (p < _configuration.RaiseProb)
             {
-                return TurnResult.Raise(this, state.Blinds * 3);
+                return TurnResult.Raise(this, state.BigBlindValue * 3);
             }
             if (p < _configuration.RaiseProb + _configuration.CheckCallProb)
             {
-                return TurnResult.CheckOrCall(this);
+                return TurnResult.CheckOrCallAny(this);
             }
 
-            if (state.CurrentBet == 0)
+            if (state.CurrentBetToCall == 0)
             {
-                return TurnResult.CheckOrCall(this);
+                return TurnResult.CheckOrCallAny(this);
             }
             return TurnResult.Fold(this);
 

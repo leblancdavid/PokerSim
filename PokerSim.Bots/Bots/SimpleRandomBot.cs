@@ -4,27 +4,27 @@ using System;
 
 namespace PokerSim.Bots
 {
-    public class SimpleRandomPlayerFactory : IBotFactory
+    public class SimpleRandomBotFactory : IBotFactory
     {
         public IPlayer GetRandomPlayer()
         {
             var random = new Random();
 
-            double checkProb = random.NextDouble() * 0.3 + 0.1;
-            double raiseProb = random.NextDouble() * 0.3 + 0.1;
+            double checkProb = random.NextDouble() / 2.0;
+            double raiseProb = random.NextDouble() / 3.0 + 0.1;
 
-            return new SimpleRandomPlayer(BotNameGenerator.GenerateName(random.Next(3, 10)),
+            return new SimpleRandomBot(BotNameGenerator.GenerateName(random.Next(3, 10)),
                 checkProb, raiseProb);
         }
     }
 
-    public class SimpleRandomPlayer : IPlayer
+    public class SimpleRandomBot : IPlayer
     {
         private double _checkCallProb;
         private double _raiseProb;
         private Random _random = new Random();
 
-        public SimpleRandomPlayer(string name, double checkCallProb, double raiseProb)
+        public SimpleRandomBot(string name, double checkCallProb = 0.4, double raiseProb = 0.3)
         {
             _checkCallProb = checkCallProb;
             _raiseProb = raiseProb;
@@ -36,21 +36,21 @@ namespace PokerSim.Bots
 
         public Guid Id { get; private set; }
 
-        public TurnResult TakeTurn(IPlayerTurnState state)
+        public TurnResult TakeTurn(IGameState state)
         {
             double p = _random.NextDouble();
             if (p < _raiseProb)
             {
-                return TurnResult.Raise(this, state.Blinds * 3);
+                return TurnResult.Raise(this, state.BigBlindValue * 3);
             }
             if (p < _raiseProb + _checkCallProb)
             {
-                return TurnResult.CheckOrCall(this);
+                return TurnResult.CheckOrCallAny(this);
             }
 
-            if (state.CurrentBet == 0)
+            if (state.CurrentBetToCall == 0)
             {
-                return TurnResult.CheckOrCall(this);
+                return TurnResult.CheckOrCallAny(this);
             }
             return TurnResult.Fold(this);
 

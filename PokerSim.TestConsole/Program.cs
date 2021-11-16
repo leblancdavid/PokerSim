@@ -9,8 +9,8 @@ namespace PokerSim.TestConsole
         {
             var pluginPlayer = new SamplePlayerPlugin.SamplePlayerPlugin();
             var engine = new TexasHoldemGameEngine(new ConsoleGameEventLogger(true));
-            engine.AddPlayer(new SimpleRandomPlayer("Bob", 0.25, 0.25));
-            engine.AddPlayer(new SimpleRandomPlayer("Joe", 0.25, 0.25));
+            engine.AddPlayer(new SimpleRandomBot("Bob", 0.25, 0.25));
+            engine.AddPlayer(new SimpleRandomBot("Joe", 0.25, 0.25));
             //engine.AddPlayer(new BasicRandomPlayer("Jane", 0.25, 0.5, 0.25));
             //engine.AddPlayer(new BasicRandomPlayer("Frank", 0.25, 0.5, 0.25));
 

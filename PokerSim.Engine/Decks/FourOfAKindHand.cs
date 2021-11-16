@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace PokerSim.Engine.Decks
 {
-    public class FourOfAKindHandBuilder : IHandBuilder
+    public class FourOfAKindHandBuilder : BaseHandBuilder
     {
-        public IHand BuildHand(IEnumerable<Card> cards)
+        public override IHand BuildHand(IEnumerable<Card> cards)
         {
             var tempList = cards.ToList();
             //Todo how to finger this one out!
@@ -22,7 +22,7 @@ namespace PokerSim.Engine.Decks
                 tempList.OrderByDescending(x => x.Value).FirstOrDefault());
         }
 
-        public bool ContainsHand(IEnumerable<Card> cards)
+        public override bool ContainsHand(IEnumerable<Card> cards)
         {
             return cards.GroupBy(x => x.Value).Where(g => g.Count() == 4).Count() == 1;
         }

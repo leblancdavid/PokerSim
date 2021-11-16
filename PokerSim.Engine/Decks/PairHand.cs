@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace PokerSim.Engine.Decks
 {
-    public class PairHandBuilder : IHandBuilder
+    public class PairHandBuilder : BaseHandBuilder
     {
-        public IHand BuildHand(IEnumerable<Card> cards)
+        public override IHand BuildHand(IEnumerable<Card> cards)
         {
             var tempList = cards.ToList();
             //Todo how to finger this one out!
@@ -25,7 +25,7 @@ namespace PokerSim.Engine.Decks
             return new PairHand(pair, tempList.OrderByDescending(x => x.Value).Take(3));
         }
 
-        public bool ContainsHand(IEnumerable<Card> cards)
+        public override bool ContainsHand(IEnumerable<Card> cards)
         {
             return cards.GroupBy(x => x.Value).Where(g => g.Count() == 2).Count() == 1;
         }

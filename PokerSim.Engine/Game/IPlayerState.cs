@@ -1,19 +1,16 @@
-﻿using PokerSim.Engine.Decks;
-using PokerSim.Engine.Players;
-using System;
-using System.Collections.Generic;
+﻿using PokerSim.Engine.Players;
 
 namespace PokerSim.Engine.Game
 {
-    internal interface IPlayerState
+    public interface IPlayerState
     {
-        IPlayer Player { get; }
-        int ChipCount { get; set; }
-        IEnumerable<Card> Cards { get; }
-        bool HasFolded { get; }
-        bool IsEliminated { get; }
-        bool IsAllIn { get; set; }
-        void Deal(Card card);
-        void Fold();
+        public IPlayer Player { get; }
+        public int ChipCount { get; }
+        public int PlayerPotSize { get; }
+        public bool HasFolded { get; }
+        public bool IsEliminated { get; }
+        public bool IsAllIn { get; }
+        public int NumberRaises { get; }
+        public int LastAmountRaised { get; }
     }
 }
