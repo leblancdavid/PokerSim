@@ -37,6 +37,8 @@ namespace PokerSim.Engine.Game
         public int CurrentBetToCall => CurrentPot.ToCallAmount(_players[CurrentPlayerIndex].Player.Id);
         public TexasHoldemStages CurrentStage { get; private set; }
 
+        public IPlayerState CurrentPlayerState => _players[CurrentPlayerIndex];
+
         public IHand BuildCurrentPlayerHand() => HandBuilder.BuildHand(CurrentPlayerCards.ToList().Concat(CommunityCards.ToList()));
         public IEnumerable<IPlayerState> GetRemainingPlayers() => _players.Where(x => !x.IsEliminated && !x.HasFolded);
 
@@ -83,7 +85,7 @@ namespace PokerSim.Engine.Game
             _players[BigBlindIndex].AddToPot(BigBlindValue);
 
             CurrentStage = TexasHoldemStages.PreFlop;
-            _logger.Log(CurrentStage, CommunityCards);
+            _logger?.Log(CurrentStage, CommunityCards);
             //Pre-flop betting
             if (!DoBettingRound())
             {
@@ -97,7 +99,7 @@ namespace PokerSim.Engine.Game
             }
 
             CurrentStage = TexasHoldemStages.Flop;
-            _logger.Log(CurrentStage, CommunityCards);
+            _logger?.Log(CurrentStage, CommunityCards);
             if (!DoBettingRound())
             {
                 return ResolveHand();
@@ -106,7 +108,7 @@ namespace PokerSim.Engine.Game
             //Turn bets
             _communityCards.Add(Deck.Draw());
             CurrentStage = TexasHoldemStages.Turn;
-            _logger.Log(CurrentStage, CommunityCards);
+            _logger?.Log(CurrentStage, CommunityCards);
             if (!DoBettingRound())
             {
                 return ResolveHand();
@@ -115,7 +117,7 @@ namespace PokerSim.Engine.Game
             //River bets
             _communityCards.Add(Deck.Draw());
             CurrentStage = TexasHoldemStages.River;
-            _logger.Log(CurrentStage, CommunityCards);
+            _logger?.Log(CurrentStage, CommunityCards);
             DoBettingRound();
 
             return ResolveHand();
@@ -186,7 +188,7 @@ namespace PokerSim.Engine.Game
 
                 var result = player.Player.TakeTurn(this);
 
-                _logger.Log(result);
+                _logger?.Log(result);
 
                 if (result.Decision == TurnDecisionType.Fold)
                 {
@@ -227,6 +229,7 @@ namespace PokerSim.Engine.Game
 
         internal void Reset(int initialChips)
         {
+            ShufflePlayers();
             foreach (var player in _players)
             {
                 player.ChipCount = initialChips;
@@ -282,6 +285,20 @@ namespace PokerSim.Engine.Game
                 }
             }
             while (_players[CurrentPlayerIndex].IsEliminated);
+        }
+
+        public void ShufflePlayers()
+        {
+            Random rng = new Random();
+            int n = _players.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                var value = _players[k];
+                _players[k] = _players[n];
+                _players[n] = value;
+            }
         }
 
     }

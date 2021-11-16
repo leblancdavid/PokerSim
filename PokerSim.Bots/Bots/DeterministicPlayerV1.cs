@@ -15,7 +15,7 @@ namespace PokerSim.Bots
         {
             var random = new Random();
 
-            double pfRaise = random.NextDouble() / 5.0 + 0.6;
+            double pfRaise = random.NextDouble() / 5.0 + 0.8;
             double pfFold = random.NextDouble() / 5.0 + 0.05;
             double raise = random.NextDouble() / 5.0 + 0.1;
             double fold = random.NextDouble() / 5.0 + 0.05;
@@ -64,6 +64,11 @@ namespace PokerSim.Bots
             var hand = state.BuildCurrentPlayerHand();
             if (hand.NormalizedScore > _preFlopRaiseHandThreshold)
             {
+                if(state.CurrentPlayerState.NumberRaises >= 2)
+                {
+                    return TurnResult.CheckOrCallAny(this);
+                }
+
                 return TurnResult.Raise(this, state.BigBlindValue * 3);
             }
             else if (hand.NormalizedScore < _preFlopFoldHandThreshold)

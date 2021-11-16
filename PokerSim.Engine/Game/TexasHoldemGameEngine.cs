@@ -6,7 +6,7 @@ namespace PokerSim.Engine.Game
     public class TexasHoldemGameEngine : IGameEngine
     {
         private InternalGameState _state;
-        private int _initialChips = 100;
+        private int _initialChips = 50;
         private IGameEventLogger _logger;
         public TexasHoldemGameEngine(IGameEventLogger logger)
         {
@@ -27,7 +27,7 @@ namespace PokerSim.Engine.Game
             while (!winner)
             {
                 var handResult = _state.PlayHand();
-                _logger.Log(handResult);
+                _logger?.Log(handResult);
                 
                 var eliminatedPlayers = _state.Players.Where(x => x.IsEliminated);
                 foreach(var player in eliminatedPlayers)
@@ -48,11 +48,9 @@ namespace PokerSim.Engine.Game
 
         private void Reset()
         {
-            foreach (var player in _state.InternalPlayers)
-            {
-                player.ChipCount = _initialChips;
-            }
-
+            _state.Reset(_initialChips);
         }
+
+        
     }
 }
