@@ -35,12 +35,13 @@ namespace PokerSim.Engine.Game
 
         public int TotalPotSize => CurrentPot.TotalPotSize;
         public int CurrentBetToCall => CurrentPot.ToCallAmount(_players[CurrentPlayerIndex].Player.Id);
+        public int TotalNumberRaises => _players.Sum(x => x.NumberRaises);
         public TexasHoldemStages CurrentStage { get; private set; }
 
         public IPlayerState CurrentPlayerState => _players[CurrentPlayerIndex];
 
         public IHand BuildCurrentPlayerHand() => HandBuilder.BuildHand(CurrentPlayerCards.ToList().Concat(CommunityCards.ToList()));
-        public IEnumerable<IPlayerState> GetRemainingPlayers() => _players.Where(x => !x.IsEliminated && !x.HasFolded);
+        public IEnumerable<IPlayerState> GetPlayersInHand() => _players.Where(x => !x.IsEliminated && !x.HasFolded);
 
         private IGameEventLogger _logger;
         internal InternalGameState(IGameEventLogger logger)

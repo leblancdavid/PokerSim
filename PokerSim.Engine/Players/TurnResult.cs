@@ -6,7 +6,8 @@ namespace PokerSim.Engine.Players
     {
         Fold,
         CheckOrCall,
-        Raise
+        Raise,
+        AllIn
     }
 
     public sealed class TurnResult

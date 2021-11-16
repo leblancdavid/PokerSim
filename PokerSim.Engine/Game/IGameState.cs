@@ -13,12 +13,13 @@ namespace PokerSim.Engine.Game
         int BigBlindValue { get; }
         int TotalPotSize { get; }
         int CurrentBetToCall { get; }
+        int TotalNumberRaises { get; }
         TexasHoldemStages CurrentStage { get; }
         int CurrentPlayerIndex { get; }
         int CurrentPlayerChipCount { get; }
         IEnumerable<Card> CurrentPlayerCards { get; }
         IPlayerState CurrentPlayerState { get; }
         IHand BuildCurrentPlayerHand();
-        IEnumerable<IPlayerState> GetRemainingPlayers();
+        IEnumerable<IPlayerState> GetPlayersInHand();
     }
 }
